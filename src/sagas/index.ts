@@ -1,8 +1,10 @@
 import { all, fork } from "redux-saga/effects";
-import { appSaga } from "./app";
+import { searchSaga } from "./search";
+import { resultSaga } from "./result";
 
 export const sagaInitial = function* root() {
     yield all([
-        fork(appSaga)
+        fork(searchSaga),
+        fork(resultSaga)
     ])
 };

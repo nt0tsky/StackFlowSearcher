@@ -13,6 +13,7 @@ interface ISearch
     onSearch?: (text: string) => void;
     searchAction: (text: string) => void;
     searchString: string;
+    placeholder?: string;
 }
 
 /**
@@ -86,11 +87,12 @@ class Search extends React.Component<ISearch, ISearchState>
             <>
                 <TextField
                     id="outlined-search"
-                    label="Search field"
                     type="search"
                     margin="normal"
-                    variant="outlined"
+                    variant="standard"
                     value={this.state.value}
+                    fullWidth={true}
+                    placeholder={this.props.placeholder}
                     onChange={this.handleChangeField}
                 />
           </>

@@ -1,4 +1,5 @@
-import SearchState, { SearchAction, SEARCH } from "./types";
+import SearchState, { SearchAction, SEARCH, UPDATE_QUESTION_ITEMS } from "./types";
+import { QuestionItem } from "../../models/QuestionItem";
 
 const initialState: SearchState = {
     searchString: ""
@@ -10,6 +11,13 @@ export function searchReducer(state = initialState, action: SearchAction): Searc
             return {
                 ...state,
                 searchString: action.payload
+            };
+        };
+        case UPDATE_QUESTION_ITEMS: {
+            const items = action.payload as Array<QuestionItem>;
+            return {
+                ...state,
+                questionItems: items
             };
         };
         default: {

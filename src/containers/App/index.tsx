@@ -3,14 +3,14 @@ import { RootState } from "../../store";
 import "./index.less";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
-import Search from "../Search";
-import { Grid, Paper } from '@material-ui/core';
+import { Grid, Container } from '@material-ui/core';
+import Routes from '../routes';
 
 /**
  * Iapp
  */
 interface IApp {
-    searchString: string;
+    
 }
 
 /**
@@ -32,11 +32,11 @@ class App extends React.Component<IApp>
      */
     render() {
         return(
-            <Grid item xs={12}>
-                <Paper>
-                    <Search />
-                </Paper>
-            </Grid>
+            <Container>
+                <Grid>
+                    <Routes />
+                </Grid>
+            </Container>
         )
     }
 }
