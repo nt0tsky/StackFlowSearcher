@@ -1,4 +1,4 @@
-import { SEARCH, UPDATE_QUESTION_ITEMS } from "./types";
+import { SEARCH, RESPONSE_RECEIVED, SAVE_LATEST_SEARCH } from "./types";
 import { BaseAction } from "../common/BaseAction";
 import { QuestionItem } from "../../models/QuestionItem";
 
@@ -7,7 +7,12 @@ export const SearchAction: (text: string) => BaseAction = (text: string) => ({
     payload: text
 });
 
-export const UpdateQuestionItemsAction: (items: Array<QuestionItem>) => BaseAction = (items: Array<QuestionItem>) => ({
-    type: UPDATE_QUESTION_ITEMS,
+export const ResponseReceivedAction: (items: Array<QuestionItem>) => BaseAction = (items: Array<QuestionItem>) => ({
+    type: RESPONSE_RECEIVED,
     payload: items
+});
+
+export const SaveLatestSearchAction: (text: string) => BaseAction = (text: string) => ({
+    type: SAVE_LATEST_SEARCH,
+    payload: text
 });

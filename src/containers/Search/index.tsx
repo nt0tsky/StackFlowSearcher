@@ -1,9 +1,7 @@
 import React from "react";
 import TextField from '@material-ui/core/TextField';
 import { RootState } from "../../store";
-import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { SearchAction } from "../../store/search/actions";
 
 /**
  * Isearch
@@ -11,8 +9,7 @@ import { SearchAction } from "../../store/search/actions";
 interface ISearch
 {
     onSearch?: (text: string) => void;
-    searchAction: (text: string) => void;
-    searchString: string;
+    searchString?: string;
     placeholder?: string;
     value?: string;
 }
@@ -62,7 +59,6 @@ class Search extends React.Component<ISearch, ISearchState>
 
         this.timeoutId = setTimeout(() => {
             if (this.props.searchString !== text) {
-                this.props.searchAction(text);
                 if (this.props.onSearch) {
                     this.props.onSearch(text);
                 }
@@ -111,10 +107,4 @@ const mapStateToProps = (state: RootState) => ({
     searchString: state.search.searchString
 });
 
-const mapDispatchToProps = (dispatch: any) => {
-    return bindActionCreators({
-        searchAction: SearchAction
-    }, dispatch);
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Search);
+export default connect(mapStateToProps, null)(Search);

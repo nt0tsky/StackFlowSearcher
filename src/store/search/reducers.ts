@@ -1,11 +1,12 @@
-import SearchState, { SearchAction, SEARCH, UPDATE_QUESTION_ITEMS } from "./types";
+import SearchState, { SearchAction, SEARCH, RESPONSE_RECEIVED, SAVE_LATEST_SEARCH } from "./types";
 import { QuestionItem } from "../../models/QuestionItem";
 
 const initialState: SearchState = {
-    searchString: ""
+    searchString: "",
+    lastSearch: []
 };
 
-export function searchReducer(state = initialState, action: SearchAction): SearchState {
+export function searchReducer(state: SearchState = initialState, action: SearchAction): SearchState {
     switch(action.type) {
         case SEARCH: {
             return {
@@ -13,7 +14,24 @@ export function searchReducer(state = initialState, action: SearchAction): Searc
                 searchString: action.payload
             };
         };
-        case UPDATE_QUESTION_ITEMS: {
+        case SAVE_LATEST_SEARCH: {
+            let lastSearch = state.lastSearch;
+            if (lastSearch.length) {
+                const lastItem = decodeURIComponent(lastSearch[lastSearch.length-1]);
+                const payload = decodeURIComponent(action.payload);
+                if (lastItem != payload) {
+                    lastSearch.push(action.payload);
+                }
+            } else {
+                lastSearch.push(decodeURIComponent(action.payload));
+            }
+
+            return {
+                ...state,
+                lastSearch: lastSearch
+            }
+        };
+        case RESPONSE_RECEIVED: {
             const items = action.payload as Array<QuestionItem>;
             return {
                 ...state,

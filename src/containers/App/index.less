@@ -1,3 +1,33 @@
 .stackvisitor-app {
     background-color: #f9f9f9;
 }
+
+.app-grid {
+    height: 100vh;
+
+    .logo-container {
+        cursor: pointer;
+
+        .logo-image {
+            width: inherit;
+        }
+    }
+}
+
+.fade-enter {
+    opacity: 0.01;
+}
+
+.fade-enter.fade-enter-active {
+    opacity: 1;
+    transition: opacity 600ms ease-in;
+}
+
+.fade-exit {
+    opacity: 1;
+}
+
+.fade-exit.fade-exit-active {
+    opacity: 0.01;
+    transition: opacity 600ms ease-in;
+}

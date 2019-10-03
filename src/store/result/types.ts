@@ -2,11 +2,11 @@ export default interface ResultState {
 
 }
 
-export const MOVE_BACK = 'MOVE_BACK';
-export type MOVE_BACK = typeof MOVE_BACK;
+export const REDIRECT_TO_HOME_ACTION = 'REDIRECT_TO_HOME_ACTION';
+export type REDIRECT_TO_HOME_ACTION = typeof REDIRECT_TO_HOME_ACTION;
 
 
-export type ResultActionTypes = MOVE_BACK;
+export type ResultActionTypes = REDIRECT_TO_HOME_ACTION;
 
 export interface ResultAction {
     type: ResultActionTypes;

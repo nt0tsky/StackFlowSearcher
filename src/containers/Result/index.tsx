@@ -11,6 +11,7 @@ import { TableHeaderItem } from "../../models/TableHeaderItem";
 import { QuestionItem } from "../../models/QuestionItem";
 import { IRoute } from "../IRoute";
 import { SearchAction } from "../../store/search/actions";
+import { withRouter, RouteComponentProps } from "react-router";
 
 interface MatchParams {
     intitle: string;
@@ -19,7 +20,7 @@ interface MatchParams {
 /**
  * Iresult
  */
-interface IResult extends IRoute<MatchParams> {
+interface IResult extends RouteComponentProps<MatchParams> {
     searchString: string;
     questionItems?: Array<QuestionItem>;
     movebackAction: Function;
@@ -32,19 +33,10 @@ interface IResult extends IRoute<MatchParams> {
 class Result extends React.Component<IResult>
 {
     /**
-     * Handle click back of result
-     */
-    handleClickBack = (e: any) => {
-        if (this.props.movebackAction) {
-            this.props.movebackAction();
-        }
-    }
-
-    /**
      * Components did mount
      */
     componentDidMount() {
-        if (this.props.match && this.props.match.params) {
+        if (!this.props.questionItems && this.props.match && this.props.match.params) {
             this.props.searchAction(this.props.match.params.intitle);
         }
     }
@@ -59,10 +51,6 @@ class Result extends React.Component<IResult>
         return items;
     }
 
-    handleChangePage = () => {
-        console.log("changed");
-    }
-
     /**
      * Renders result
      * @returns  
@@ -72,7 +60,6 @@ class Result extends React.Component<IResult>
             <Grid container>
                 <Grid item xs={8}>
                     <div className="search-result-row">
-                        <KeyboardReturnOutlinedIcon className="home-button" onClick={this.handleClickBack}/>
                         <Search value={this.props.match.params.intitle} placeholder="Результаты поиска"/>
                     </div>
                 </Grid>
@@ -123,4 +110,4 @@ const mapDispatchToProps = (dispatch: any) => {
     }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Result);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Result));
