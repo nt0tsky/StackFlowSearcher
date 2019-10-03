@@ -3,9 +3,10 @@ import { RootState } from "../../store";
 import "./index.less";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
-import { Grid, Container, Paper, CssBaseline, Typography, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { Grid, Container, Paper, CssBaseline, Typography, Table, TableHead, TableRow, TableCell, TableBody, ExpansionPanelSummary, ExpansionPanel, ExpansionPanelDetails } from '@material-ui/core';
 import Routes from '../routes';
 import { MovebackAction } from "../../store/result/actions";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 /**
  * Iapp
@@ -66,16 +67,26 @@ class App extends React.Component<IApp>
                         </Container>
                     </Grid>
                     <Grid item xs={12}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Последний поиск</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {this.renderBody()}
-                            </TableBody>
-                        </Table>
+                        <ExpansionPanel>
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography>Последний поиск</Typography>
+                            </ExpansionPanelSummary>
+
+                            <ExpansionPanelDetails>
+                                <Table>
+                                    <TableBody>
+                                        <ExpansionPanelDetails>
+                                            {this.renderBody()}
+                                        </ExpansionPanelDetails>
+
+                                    </TableBody>
+                                </Table>
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
                     </Grid>
                 </Grid>
             </Container>
