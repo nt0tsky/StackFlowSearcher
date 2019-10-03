@@ -14,6 +14,7 @@ interface ISearch
     searchAction: (text: string) => void;
     searchString: string;
     placeholder?: string;
+    value?: string;
 }
 
 /**
@@ -29,6 +30,8 @@ interface ISearchState
  */
 class Search extends React.Component<ISearch, ISearchState>
 {
+    private textSearch?: string;
+
     /**
      * Timeout id of search
      */
@@ -45,6 +48,7 @@ class Search extends React.Component<ISearch, ISearchState>
      */
     constructor(props: ISearch) {
         super(props);
+        this.textSearch = decodeURIComponent(props.value || "");
         this.state = {
             value: ""
         };
@@ -71,6 +75,9 @@ class Search extends React.Component<ISearch, ISearchState>
      */
     handleChangeField = (e: any) => {
         const inputValue = e.target.value;
+        if (inputValue !== "" && this.textSearch) {
+            this.textSearch = "";
+        }
 
         this.listenChanges(inputValue);
         this.setState({
@@ -90,7 +97,7 @@ class Search extends React.Component<ISearch, ISearchState>
                     type="search"
                     margin="normal"
                     variant="standard"
-                    value={this.state.value}
+                    value={this.textSearch || this.state.value}
                     fullWidth={true}
                     placeholder={this.props.placeholder}
                     onChange={this.handleChangeField}

@@ -7,10 +7,14 @@ import { MOVE_BACK } from "../../store/result/types";
 /**
  * Searchs saga
  */
-export function* resultSaga() {
+export function* watchResult() {
     yield takeEvery(MOVE_BACK, handleMoveBack);
 }
 
+/**
+ * Handles move back
+ * @param action 
+ */
 function* handleMoveBack(action: BaseAction) {
     yield put(push('/'));
 }

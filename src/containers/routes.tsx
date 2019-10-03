@@ -8,8 +8,8 @@ export default class Routes extends React.Component
     render() {
         return(
             <Switch>
-                <Route exact={true} path="/" component={Home} />
-                <Route exact={true} path="/result" component={Result} />
+                <Route exact path="/" component={Home} />
+                <Route path="/result/:intitle?" component={Result}/>
             </Switch>
         )
     }

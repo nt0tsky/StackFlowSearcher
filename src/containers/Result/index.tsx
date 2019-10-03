@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, TableHead, TableRow, Table, TableCell, TableBody, Paper, Chip } from "@material-ui/core";
+import { Grid, TableHead, TableRow, Table, TableCell, TableBody, Paper, Chip, TableFooter } from "@material-ui/core";
 import Search from "../Search";
 import { RootState } from "../../store";
 import { bindActionCreators } from "redux";
@@ -9,14 +9,21 @@ import { MovebackAction } from "../../store/result/actions";
 import "./index.less";
 import { TableHeaderItem } from "../../models/TableHeaderItem";
 import { QuestionItem } from "../../models/QuestionItem";
+import { IRoute } from "../IRoute";
+import { SearchAction } from "../../store/search/actions";
+
+interface MatchParams {
+    intitle: string;
+}
 
 /**
  * Iresult
  */
-interface IResult {
+interface IResult extends IRoute<MatchParams> {
     searchString: string;
     questionItems?: Array<QuestionItem>;
     movebackAction: Function;
+    searchAction: Function
 }
 
 /**
@@ -33,6 +40,15 @@ class Result extends React.Component<IResult>
         }
     }
 
+    /**
+     * Components did mount
+     */
+    componentDidMount() {
+        if (this.props.match && this.props.match.params) {
+            this.props.searchAction(this.props.match.params.intitle);
+        }
+    }
+
     tableHeaderItems = () => {
         let items: Array<TableHeaderItem> = [];
         items.push({name: "Автор", align: "left"});
@@ -43,8 +59,8 @@ class Result extends React.Component<IResult>
         return items;
     }
 
-    createData(name: any, calories: any, fat: any, carbs: any, protein: any) {
-        return { name, calories, fat, carbs, protein };
+    handleChangePage = () => {
+        console.log("changed");
     }
 
     /**
@@ -53,14 +69,14 @@ class Result extends React.Component<IResult>
      */
     render() {
         return (
-            <Grid container spacing={3}>
+            <Grid container>
                 <Grid item xs={8}>
-                <div className="search-result-row">
-                    <KeyboardReturnOutlinedIcon className="home-button" onClick={this.handleClickBack}/>
-                    <Search placeholder="Результаты поиска"/>
-                </div>
+                    <div className="search-result-row">
+                        <KeyboardReturnOutlinedIcon className="home-button" onClick={this.handleClickBack}/>
+                        <Search value={this.props.match.params.intitle} placeholder="Результаты поиска"/>
+                    </div>
                 </Grid>
-                <Grid item xs={8} spacing={5}>
+                <Grid item xs={8}>
                     <Table size="small">
                         <TableHead>
                             <TableRow>
@@ -70,33 +86,23 @@ class Result extends React.Component<IResult>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.props.questionItems && this.props.questionItems.map(val => {
+                            {this.props.questionItems && this.props.questionItems.map((val, idx) => {
                                 return (
-                                    <TableRow key={val.title}>
-                                        <TableCell component="th" scope="row" className="user-display-name">
+                                    <TableRow hover key={`${val.title}_{idx}`}>
+                                        <TableCell key={`${val.owner.display_name}_display_name`} component="th" scope="row" className="user-display-name">
                                             {val.owner.display_name}
                                         </TableCell>
-                                        <TableCell align="right">{val.title}</TableCell>
-                                        <TableCell align="right">{val.answer_count}</TableCell>
-                                        <TableCell align="right">
-                                        {val.tags && val.tags.map(val => {
+                                        <TableCell key={`${val.title}_title`} align="right">{val.title}</TableCell>
+                                        <TableCell key={`${val.answer_count}_answercount`} align="right">{val.answer_count}</TableCell>
+                                        <TableCell key={`chips_${idx}`}align="right">
+                                        {val.tags && val.tags.map((val, idx) => {
                                             return (
-                                                <Chip clickable component="a" label={val} />
+                                                <Chip key={`chip_${idx}`} clickable component="a" label={val} />
                                             );
                                         })}</TableCell>
                                     </TableRow>
                                 );
                             })}
-                            {/* {rows.map(row => (
-                            <TableRow key={row.name}>
-                                <TableCell component="th" scope="row">
-                                {row.name}
-                                </TableCell>
-                                <TableCell align="right">{row.calories}</TableCell>
-                                <TableCell align="right">{row.fat}</TableCell>
-                                <TableCell align="right">{row.carbs}</TableCell>
-                            </TableRow>
-                            ))} */}
                         </TableBody>
                     </Table>
                 </Grid>
@@ -112,7 +118,8 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: any) => {
     return bindActionCreators({
-        movebackAction: MovebackAction
+        movebackAction: MovebackAction,
+        searchAction: SearchAction
     }, dispatch);
 };
 
