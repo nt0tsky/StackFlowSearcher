@@ -1,11 +1,12 @@
-import {  put, takeLatest, call } from "redux-saga/effects";
-import { SEARCH } from "../../store/search/types";
-import { BaseAction } from "../../store/common/BaseAction";
-import Axios from "axios";
-import { push } from "connected-react-router";
-import { ResponseReceivedAction, SaveLatestSearchAction } from "../../store/search/actions";
-import { ToResultsAction } from "../../store/navigation/actions";
-
+import { put, takeLatest, call } from 'redux-saga/effects';
+import { SEARCH } from '../../store/search/types';
+import { BaseAction } from '../../store/common/BaseAction';
+import Axios from 'axios';
+import {
+    ResponseReceivedAction,
+    SaveLatestSearchAction
+} from '../../store/search/actions';
+import { ToResultsAction } from '../../store/navigation/actions';
 
 /**
  * Searchs saga
@@ -16,7 +17,7 @@ export function* watchSearch() {
 
 /**
  * Handles search
- * @param action 
+ * @param action
  */
 function* handleSearch(action: BaseAction) {
     const data = yield advancedSearch(action.payload);
@@ -29,18 +30,22 @@ function* handleSearch(action: BaseAction) {
 
 /**
  * Searchs topics
- * @param payload 
+ * @param payload
  */
 function* advancedSearch(payload: string) {
     const data: ISearchTopics = {
         key: process.env.APPLICATION_KEY,
-        site: "stackoverflow",
-        tab: "relevance",
+        site: 'stackoverflow',
+        tab: 'relevance',
         q: payload
     };
 
     const config = {
         params: data
     };
-    return yield call(Axios.get, `${process.env.API_URL}/search/advanced`, config);
+    return yield call(
+        Axios.get,
+        `${process.env.API_URL}/search/advanced`,
+        config
+    );
 }

@@ -1,11 +1,14 @@
 import * as React from 'react';
-import { RootState } from "../../store";
-import "./index.less";
-import { connect } from "react-redux";
+import { RootState } from '../../store';
+import './index.less';
+import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Grid, Container, Paper, CssBaseline, Typography, Table, TableHead, TableRow, TableCell, TableBody, ExpansionPanelSummary, ExpansionPanel, ExpansionPanelDetails } from '@material-ui/core';
+import {
+    Grid,
+    Container,
+    CssBaseline} from '@material-ui/core';
 import Routes from '../routes';
-import { MovebackAction } from "../../store/result/actions";
+import { MovebackAction } from '../../store/result/actions';
 
 /**
  * Iapp
@@ -17,14 +20,12 @@ interface IApp {
 /**
  * App
  */
-class App extends React.Component<IApp>
-{
+class App extends React.Component<IApp> {
     /**
      *
      */
     constructor(props: IApp) {
         super(props);
-        
     }
 
     /**
@@ -32,21 +33,33 @@ class App extends React.Component<IApp>
      */
     handleLogoClick = () => {
         this.props.movebackAction();
-    }
+    };
 
     /**
      * Renders app
-     * @returns  
+     * @returns
      */
     render() {
-        return(
+        return (
             <>
                 <CssBaseline />
-                <Container maxWidth="md">
-                    <Grid alignItems="center" container spacing={10} className="app-grid">
+                <Container maxWidth='md'>
+                    <Grid
+                        alignItems='center'
+                        container
+                        spacing={10}
+                        className='app-grid'
+                    >
                         <Grid item xs={12}>
-                            <Container className="logo-container" maxWidth="sm" onClick={this.handleLogoClick}>
-                                <img className="logo-image" src="/src/content/images/logo.png" />
+                            <Container
+                                className='logo-container'
+                                maxWidth='sm'
+                                onClick={this.handleLogoClick}
+                            >
+                                <img
+                                    className='logo-image'
+                                    src='/src/content/images/logo.png'
+                                />
                             </Container>
                         </Grid>
                         <Grid item xs={12}>
@@ -54,13 +67,11 @@ class App extends React.Component<IApp>
                                 <Routes />
                             </Container>
                         </Grid>
-                        <Grid item xs={12}>
-                            
-                        </Grid>
+                        <Grid item xs={12}></Grid>
                     </Grid>
                 </Container>
             </>
-        )
+        );
     }
 }
 
@@ -70,9 +81,15 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => {
-    return bindActionCreators({
-        movebackAction: MovebackAction
-    }, dispatch);
+    return bindActionCreators(
+        {
+            movebackAction: MovebackAction
+        },
+        dispatch
+    );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App);

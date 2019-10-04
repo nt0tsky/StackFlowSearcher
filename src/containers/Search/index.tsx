@@ -1,110 +1,120 @@
-import React from "react";
-import TextField from '@material-ui/core/TextField';
-import { RootState } from "../../store";
-import { connect } from "react-redux";
+import React from 'react';
+import { Grid } from '@material-ui/core';
+import SearchInput from '../SearchInput';
+import { RootState } from '../../store';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { MovebackAction } from '../../store/result/actions';
+import { SearchItem } from '../../models/SearchItem';
+import { SearchAction } from '../../store/search/actions';
+import { withRouter, RouteComponentProps } from 'react-router';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-/**
- * Isearch
- */
-interface ISearch
-{
-    onSearch?: (text: string) => void;
-    searchString?: string;
-    placeholder?: string;
-    value?: string;
+import './index.less';
+import SearchData from './SearchData';
+import { SearchService } from './services/SearchService';
+
+interface MatchParams {
+    intitle: string;
 }
 
 /**
- * Isearch state
+ * Iresult
  */
-interface ISearchState
-{
-    value: string;
+interface ISearch extends RouteComponentProps<MatchParams> {
+    searchString: string;
+    SearchItems: Array<SearchItem>;
+    movebackAction: Function;
+    searchAction: Function;
+}
+
+interface ISearchState {
+    page: number;
+    rowsPerPage: number;
 }
 
 /**
- * Search
+ * Result
  */
-class Search extends React.Component<ISearch, ISearchState>
-{
-    private textSearch?: string;
-
+class Search extends React.Component<ISearch, ISearchState> {
     /**
-     * Timeout id of search
-     */
-    private timeoutId: any;
-
-    /**
-     * Timeout of search
-     */
-    private timeout: number = 700;
-
-    /**
-     * Creates an instance of search.
-     * @param props 
+     *
      */
     constructor(props: ISearch) {
         super(props);
-        this.textSearch = decodeURIComponent(props.value || "");
         this.state = {
-            value: ""
+            page: 0,
+            rowsPerPage: 5
         };
     }
 
     /**
-     * Listen changes of search
+     * Components did mount
      */
-    listenChanges = (text: string) => {
-        clearTimeout(this.timeoutId);
-
-        this.timeoutId = setTimeout(() => {
-            if (this.props.searchString !== text) {
-                if (this.props.onSearch) {
-                    this.props.onSearch(text);
-                }
-            }
-        }, this.timeout);
+    componentDidMount() {
+        if (this.props.match && this.props.match.params) {
+            this.props.searchAction(this.props.match.params.intitle);
+        }
     }
 
     /**
-     * Handle change field of search
+     * Handle search of result
      */
-    handleChangeField = (e: any) => {
-        const inputValue = e.target.value;
-        if (inputValue !== "" && this.textSearch) {
-            this.textSearch = "";
-        }
-
-        this.listenChanges(inputValue);
-        this.setState({
-            value: inputValue
-        });
+    handleSearch = (text: string) => {
+        this.props.searchAction(text);
     };
 
     /**
-     * Renders search
-     * @returns  
+     * Renders result
+     * @returns
      */
     render() {
-        return(
-            <>
-                <TextField
-                    id="outlined-search"
-                    type="search"
-                    margin="normal"
-                    variant="standard"
-                    value={this.textSearch || this.state.value}
-                    fullWidth={true}
-                    placeholder={this.props.placeholder}
-                    onChange={this.handleChangeField}
-                />
-          </>
-        )
+        return (
+            <ReactCSSTransitionGroup
+                transitionAppear={true}
+                transitionAppearTimeout={600}
+                transitionEnterTimeout={600}
+                transitionLeaveTimeout={200}
+                transitionName='loadComponent'
+            >
+                <Grid container>
+                    <Grid item xs={12}>
+                        <div className='search-result-row'>
+                            <SearchInput
+                                onSearch={this.handleSearch}
+                                value={this.props.match.params.intitle}
+                                placeholder='Результаты поиска'
+                            />
+                        </div>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <SearchData
+                            SearchItems={this.props.SearchItems}
+                            headerItems={SearchService.GetHeaderItems()}
+                        />
+                    </Grid>
+                </Grid>
+            </ReactCSSTransitionGroup>
+        );
     }
 }
 
 const mapStateToProps = (state: RootState) => ({
-    searchString: state.search.searchString
+    searchString: state.search.searchString,
+    SearchItems: state.search.SearchItems
 });
 
-export default connect(mapStateToProps, null)(Search);
+const mapDispatchToProps = (dispatch: any) => {
+    return bindActionCreators(
+        {
+            movebackAction: MovebackAction,
+            searchAction: SearchAction
+        },
+        dispatch
+    );
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withRouter(Search));

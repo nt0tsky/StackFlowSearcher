@@ -1,26 +1,23 @@
-import React from "react";
-import { Route, Switch, RouteComponentProps, withRouter } from 'react-router-dom';
-import Home from "./Home";
-import Result from "./Result";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { RootState } from "../store";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import React from 'react';
+import {
+    Route,
+    Switch,
+    RouteComponentProps,
+    withRouter
+} from 'react-router-dom';
+import Home from './Home';
+import Search from './Search';
 
-interface IRoutes extends RouteComponentProps {
+interface IRoutes extends RouteComponentProps {}
 
-}
-
-class Routes extends React.Component<IRoutes>
-{
+class Routes extends React.Component<IRoutes> {
     render() {
-        return(
+        return (
             <Switch location={this.props.location}>
-                <Route exact path="/" component={Home} />
-                <Route path="/result/:intitle?" component={Result}/>
+                <Route exact path='/' component={Home} />
+                <Route path='/result/:intitle?' component={Search} />
             </Switch>
-        )
+        );
     }
 }
 
