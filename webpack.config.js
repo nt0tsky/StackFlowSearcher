@@ -57,7 +57,8 @@ module.exports = {
             filename: "index.html",
             template: templates + "/index.html",
             showErrors: true,
-            minify: true
+            minify: true,
+            favicon: "./src/content/images/favicon.png"
         }),
         new Dotenv({
             path: "./settings.env"

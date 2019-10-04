@@ -8,4 +8,5 @@ interface ISearchTopics {
     key?: string;
     site: string;
     q?: string;
+    tab?: string;
 }

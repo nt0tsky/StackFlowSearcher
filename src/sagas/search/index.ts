@@ -19,7 +19,12 @@ export function* watchSearch() {
  * @param action 
  */
 function* handleSearch(action: BaseAction) {
-    yield advancedSearch(action.payload);
+    const data = yield advancedSearch(action.payload);
+    if (data.data && data.data.items) {
+        yield put(ResponseReceivedAction(data.data.items));
+        yield put(SaveLatestSearchAction(action.payload));
+        yield put(ToResultsAction(action.payload));
+    }
 }
 
 /**
@@ -30,16 +35,12 @@ function* advancedSearch(payload: string) {
     const data: ISearchTopics = {
         key: process.env.APPLICATION_KEY,
         site: "stackoverflow",
+        tab: "relevance",
         q: payload
     };
 
     const config = {
         params: data
     };
-    const response = yield call(Axios.get, `${process.env.API_URL}/search/advanced`, config);
-    if (response.data && response.data.items) {
-        yield put(ResponseReceivedAction(response.data.items));
-        yield put(SaveLatestSearchAction(payload));
-        yield put(ToResultsAction(payload));
-    }
+    return yield call(Axios.get, `${process.env.API_URL}/search/advanced`, config);
 }
