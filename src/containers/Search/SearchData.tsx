@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Paper, Table, TableBody, TablePagination } from '@material-ui/core';
+import { Paper, Table, TableBody, TablePagination, Chip } from '@material-ui/core';
 import { HeaderItem } from '../../models/HeaderItem';
 import { SearchItem } from '../../models/SearchItem';
 import { SearchDataHeader } from './SearchDataHeader';
 import { SearchDataItem } from './SearchDataItem';
+import FaceIcon from '@material-ui/icons/Face';
+import DoneIcon from '@material-ui/icons/Done';
 
 /**
  * Isearch data
@@ -18,6 +20,8 @@ interface ISearchData {
 interface ISearchDataState {
     rowsPerPage: number;
     page: number;
+    startIdx: number;
+    endIdx: number;
 }
 
 /**
@@ -31,7 +35,9 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
         super(props);
         this.state = {
             page: 0,
-            rowsPerPage: 5
+            rowsPerPage: 5,
+            startIdx: -1,
+            endIdx: -1
         };
     }
 
@@ -59,11 +65,21 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
     };
 
     /**
+     * Handle select data item of search data
+     */
+    handleSelectDataItem = (index: number) => {
+        this.setState({
+            startIdx: index,
+            endIdx: index +1
+        });
+    }
+
+    /**
      * Render items of search data
      */
     renderItems = () => {
-        const startIdx: number = this.state.page * this.state.rowsPerPage;
-        const endIdx: number = startIdx + this.state.rowsPerPage;
+        const startIdx: number = this.state.startIdx !== -1 ? this.state.startIdx : this.state.page * this.state.rowsPerPage;
+        const endIdx: number = this.state.endIdx !== -1 ? this.state.endIdx : startIdx + this.state.rowsPerPage;
         return this.props.SearchItems.slice(startIdx, endIdx).map(
             (val, idx) => {
                 return (
@@ -71,11 +87,37 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
                         key={`data-item-${idx}`}
                         index={idx}
                         item={val}
+                        onSelectDataItem={this.handleSelectDataItem}
                     />
                 );
             }
         );
     };
+
+    renderUnselect = () => {
+        if (this.state.startIdx !== -1 && this.state.endIdx !== -1) {
+            return(
+                <Chip 
+                    icon={<FaceIcon />}
+                    label="Сбросить"
+                    onDelete={this.handleUnselect}
+                    size="small"
+                    className="chip-back"
+
+                />
+            )
+        }
+    }
+
+    /**
+     * Handle unselect of search data
+     */
+    handleUnselect = () => {
+        this.setState({
+            startIdx: -1,
+            endIdx: -1
+        });
+    }
 
     /**
      * Renders search data
@@ -84,6 +126,7 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
     render() {
         return (
             <Paper className='search-data'>
+                {this.renderUnselect()}
                 <Table size='small'>
                     <SearchDataHeader headerItems={this.props.headerItems} />
                     <TableBody>{this.renderItems()}</TableBody>

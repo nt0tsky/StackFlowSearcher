@@ -3,12 +3,32 @@ import { SearchItem } from '../../models/SearchItem';
 import { TableRow, TableCell, Typography, Chip } from '@material-ui/core';
 import { SearchDataItemOwner } from './SearchDataItemOwner';
 
+/**
+ * Isearch data item
+ */
 interface ISearchDataItem {
     item: SearchItem;
     index: number;
+    onSelectDataItem?: (index: number) => void;
 }
 
+/**
+ * Search data item
+ */
 export class SearchDataItem extends React.Component<ISearchDataItem> {
+    /**
+     * Handle title click of search data item
+     */
+    handleTitleClick = () => {
+        if (this.props.onSelectDataItem) {
+            this.props.onSelectDataItem(this.props.index);
+        }
+    }
+
+    /**
+     * Renders search data item
+     * @returns  
+     */
     render() {
         const item = this.props.item;
 
@@ -25,7 +45,7 @@ export class SearchDataItem extends React.Component<ISearchDataItem> {
                         owner={item.owner}
                     />
                 </TableCell>
-                <TableCell key={`${item.title}_title`} align='right'>
+                <TableCell key={`${item.title}_title`} align='right' onClick={this.handleTitleClick}>
                     <Typography variant='body2'>{item.title}</Typography>
                 </TableCell>
                 <TableCell
