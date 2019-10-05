@@ -1,10 +1,11 @@
 import { put, takeLatest, call } from 'redux-saga/effects';
-import { SEARCH } from '../../store/search/types';
+import { SEARCH, OWNER_QUESTIONS_SEARCH } from '../../store/search/types';
 import { BaseAction } from '../../store/common/BaseAction';
 import Axios from 'axios';
 import {
     ResponseReceivedAction,
-    SaveLatestSearchAction
+    SaveLatestSearchAction,
+    ResponseReceivedOwnerQuestions
 } from '../../store/search/actions';
 import { ToResultsAction } from '../../store/navigation/actions';
 
@@ -13,6 +14,21 @@ import { ToResultsAction } from '../../store/navigation/actions';
  */
 export function* watchSearch() {
     yield takeLatest(SEARCH, handleSearch);
+    yield takeLatest(OWNER_QUESTIONS_SEARCH, handleOwnerQuestionsSearch);
+}
+
+function* handleOwnerQuestionsSearch(action: BaseAction) {
+    const data = yield advancedSearch({
+        site: 'stackoverflow',
+        key: process.env.APPLICATION_KEY,
+        sort: 'activity',
+        user: action.payload,
+        order: 'desc'
+    });
+
+    if (data.data && data.data.items) {
+        yield put(ResponseReceivedOwnerQuestions(data.data.items));
+    }
 }
 
 /**
@@ -20,7 +36,12 @@ export function* watchSearch() {
  * @param action
  */
 function* handleSearch(action: BaseAction) {
-    const data = yield advancedSearch(action.payload);
+    const data = yield advancedSearch({
+        key: process.env.APPLICATION_KEY,
+        site: 'stackoverflow',
+        tab: 'relevance',
+        q: action.payload
+    });
     if (data.data && data.data.items) {
         yield put(ResponseReceivedAction(data.data.items));
         yield put(SaveLatestSearchAction(action.payload));
@@ -32,16 +53,9 @@ function* handleSearch(action: BaseAction) {
  * Searchs topics
  * @param payload
  */
-function* advancedSearch(payload: string) {
-    const data: ISearchTopics = {
-        key: process.env.APPLICATION_KEY,
-        site: 'stackoverflow',
-        tab: 'relevance',
-        q: payload
-    };
-
+function* advancedSearch(params: ISearchTopics) {
     const config = {
-        params: data
+        params: params
     };
     return yield call(
         Axios.get,

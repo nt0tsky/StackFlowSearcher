@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, LinearProgress } from '@material-ui/core';
 import SearchInput from '../SearchInput';
 import { RootState } from '../../store';
 import { bindActionCreators } from 'redux';
@@ -89,7 +89,7 @@ class Search extends React.Component<ISearch, ISearchState> {
                     </Grid>
                     <Grid item xs={12}>
                         <SearchData
-                            SearchItems={this.props.SearchItems}
+                            searchItems={this.props.SearchItems}
                             headerItems={SearchService.GetHeaderItems()}
                             searchText={this.props.match.params.intitle}
                         />

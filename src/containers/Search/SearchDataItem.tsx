@@ -25,6 +25,7 @@ export class SearchDataItem extends React.Component<ISearchDataItem> {
         if (this.props.onSelectDataItem) {
             this.props.onSelectDataItem({
                 index: this.props.index,
+                item: this.props.item,
                 selected: true
             });
         }

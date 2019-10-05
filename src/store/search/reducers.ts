@@ -2,14 +2,17 @@ import SearchState, {
     SearchAction,
     SEARCH,
     RESPONSE_RECEIVED,
-    SAVE_LATEST_SEARCH
+    SAVE_LATEST_SEARCH,
+    RESPONSE_RECEIVED_OWNER_QUESTIONS,
+    OWNER_QUESTIONS_CLEAR
 } from './types';
 import { SearchItem } from '../../models/SearchItem';
 
 const initialState: SearchState = {
     searchString: '',
     SearchItems: [],
-    lastSearch: []
+    lastSearch: [],
+    ownerQuestions: []
 };
 
 export function searchReducer(
@@ -41,6 +44,18 @@ export function searchReducer(
                 ...state,
                 lastSearch: lastSearch
             };
+        }
+        case RESPONSE_RECEIVED_OWNER_QUESTIONS: {
+            return {
+                ...state,
+                ownerQuestions: action.payload
+            }
+        }
+        case OWNER_QUESTIONS_CLEAR: {
+            return {
+                ...state,
+                ownerQuestions: []
+            }
         }
         case RESPONSE_RECEIVED: {
             const items = action.payload as Array<SearchItem>;

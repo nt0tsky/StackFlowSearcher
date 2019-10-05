@@ -9,4 +9,5 @@ interface ISearchTopics {
     site: string;
     q?: string;
     tab?: string;
+    user?: number;
 }
