@@ -7,7 +7,7 @@ import { SearchItem } from '../../models/SearchItem';
 import { SearchDataHeader } from './SearchDataHeader';
 import { SearchDataItem } from './SearchDataItem';
 import FaceIcon from '@material-ui/icons/Face';
-import DoneIcon from '@material-ui/icons/Done';
+import { SelectedItemDTO } from './models/SelectedItemDTO';
 
 /**
  * Isearch data
@@ -15,29 +15,38 @@ import DoneIcon from '@material-ui/icons/Done';
 interface ISearchData {
     headerItems: Array<HeaderItem>;
     SearchItems: Array<SearchItem>;
+    searchText: string;
 }
 
+/**
+ * Isearch data state
+ */
 interface ISearchDataState {
     rowsPerPage: number;
     page: number;
-    startIdx: number;
-    endIdx: number;
+    selectedItem: SelectedItemDTO;
+    searchText: string;
 }
 
 /**
  * Search data
  */
 class SearchData extends React.Component<ISearchData, ISearchDataState> {
+    
     /**
      *
      */
     constructor(props: ISearchData) {
         super(props);
+        debugger;
         this.state = {
             page: 0,
             rowsPerPage: 5,
-            startIdx: -1,
-            endIdx: -1
+            searchText: props.searchText,
+            selectedItem: {
+                index: 0,
+                selected: false 
+            }
         };
     }
 
@@ -67,26 +76,39 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
     /**
      * Handle select data item of search data
      */
-    handleSelectDataItem = (index: number) => {
+    handleSelectDataItem = (item: SelectedItemDTO) => {
         this.setState({
-            startIdx: index,
-            endIdx: index +1
+            selectedItem: item
         });
+    }
+
+    /**
+     * Components did update
+     */
+    componentDidUpdate() {
+        if (this.state.searchText != this.props.searchText) {
+            this.setState({
+                page: 0,
+                searchText: this.props.searchText
+            });
+        }
     }
 
     /**
      * Render items of search data
      */
     renderItems = () => {
-        const startIdx: number = this.state.startIdx !== -1 ? this.state.startIdx : this.state.page * this.state.rowsPerPage;
-        const endIdx: number = this.state.endIdx !== -1 ? this.state.endIdx : startIdx + this.state.rowsPerPage;
+        const startIdx: number = this.state.page * this.state.rowsPerPage + (this.state.selectedItem.index ? this.state.selectedItem.index : 0);
+        const endIdx: number = startIdx + (this.state.selectedItem.selected ? 1: this.state.rowsPerPage);
         return this.props.SearchItems.slice(startIdx, endIdx).map(
             (val, idx) => {
+                const index: number = this.state.selectedItem.selected  ? this.state.selectedItem.index : idx;
                 return (
                     <SearchDataItem
                         key={`data-item-${idx}`}
-                        index={idx}
+                        index={index}
                         item={val}
+                        selected={this.state.selectedItem.selected}
                         onSelectDataItem={this.handleSelectDataItem}
                     />
                 );
@@ -95,7 +117,7 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
     };
 
     renderUnselect = () => {
-        if (this.state.startIdx !== -1 && this.state.endIdx !== -1) {
+        if (this.state.selectedItem.selected) {
             return(
                 <Chip 
                     icon={<FaceIcon />}
@@ -114,8 +136,10 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
      */
     handleUnselect = () => {
         this.setState({
-            startIdx: -1,
-            endIdx: -1
+            selectedItem: {
+                index: 0,
+                selected: false
+            }
         });
     }
 

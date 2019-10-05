@@ -91,6 +91,7 @@ class Search extends React.Component<ISearch, ISearchState> {
                         <SearchData
                             SearchItems={this.props.SearchItems}
                             headerItems={SearchService.GetHeaderItems()}
+                            searchText={this.props.match.params.intitle}
                         />
                     </Grid>
                 </Grid>

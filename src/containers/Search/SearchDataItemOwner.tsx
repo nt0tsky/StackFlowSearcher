@@ -9,6 +9,7 @@ import * as Colors from '@material-ui/core/colors';
 interface ISearchDataItemOwner {
     owner: SearchOwner;
     index: number;
+    onClick: () => void;
 }
 
 export /**
@@ -68,7 +69,7 @@ const SearchDataItemOwner: FC<ISearchDataItemOwner> = (
 
     return (
         <Tooltip title={props.owner.display_name}>
-            <Avatar className={`${classes.avatar} owner-picture`}>
+            <Avatar className={`${classes.avatar} owner-picture`} onClick={props.onClick}>
                 <Typography variant='caption'>{shortName()}</Typography>
             </Avatar>
         </Tooltip>
