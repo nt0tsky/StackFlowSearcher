@@ -101,7 +101,7 @@ class SearchInput extends React.Component<ISearchInput, ISearchInputState> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    searchString: state.search.searchString
+    searchString: state.searchInput.searchString
 });
 
 export default connect(

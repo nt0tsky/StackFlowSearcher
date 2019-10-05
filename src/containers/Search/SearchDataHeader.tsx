@@ -1,6 +1,6 @@
-import React from "react";
-import { HeaderItem } from "../../models/HeaderItem";
-import { TableHead, TableRow, TableCell } from "@material-ui/core";
+import React from 'react';
+import { HeaderItem } from '../../models/HeaderItem';
+import { TableHead, TableRow, TableCell } from '@material-ui/core';
 
 /**
  * Isearch data header
@@ -12,14 +12,13 @@ interface ISearchDataHeader {
 /**
  * Search data header
  */
-export class SearchDataHeader extends React.Component<ISearchDataHeader>
-{
+export class SearchDataHeader extends React.Component<ISearchDataHeader> {
     /**
      * Renders search data header
-     * @returns  
+     * @returns
      */
     render() {
-        return(
+        return (
             <TableHead>
                 <TableRow>
                     {this.props.headerItems.map((val, idx) => {

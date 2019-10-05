@@ -1,7 +1,10 @@
-import { TO_HOME_ACTION, TO_RESULTS_ACTION } from "../../store/navigation/types";
-import { takeLatest, put } from "redux-saga/effects";
-import { BaseAction } from "../../store/common/BaseAction";
-import { push } from "connected-react-router";
+import {
+    TO_HOME_ACTION,
+    TO_RESULTS_ACTION
+} from '../../store/navigation/types';
+import { takeLatest, put } from 'redux-saga/effects';
+import { BaseAction } from '../../store/common/BaseAction';
+import { push } from 'connected-react-router';
 
 /**
  * Searchs saga
@@ -13,13 +16,14 @@ export function* watchNavigation() {
 
 /**
  * Handles move back
- * @param action 
+ * @param action
  */
 function* handleToHome(action: BaseAction) {
     return yield put(push('/'));
 }
 
 function* handleToResults(action: BaseAction) {
+    debugger;
     const text = encodeURIComponent(action.payload);
     yield put(push(`/result/${text}`));
 }

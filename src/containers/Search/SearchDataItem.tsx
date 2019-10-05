@@ -29,25 +29,31 @@ export class SearchDataItem extends React.Component<ISearchDataItem> {
                 selected: true
             });
         }
-    }
+    };
 
     /**
      * Handle click owner of search data item
      */
     handleClickOwner = () => {
         this.handleTitleClick();
-    }
+    };
 
     /**
      * Renders search data item
-     * @returns  
+     * @returns
      */
     render() {
         const { item } = this.props;
         const title = unescape(item.title);
 
         return (
-            <TableRow onClick={this.handleTitleClick} className="search-data-item" hover selected={this.props.selected} key={`${item.title}_{idx}`}>
+            <TableRow
+                onClick={this.handleTitleClick}
+                className='search-data-item'
+                hover
+                selected={this.props.selected}
+                key={`${item.title}_{idx}`}
+            >
                 <TableCell
                     key={`${item.owner.display_name}_display_name`}
                     component='th'

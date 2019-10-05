@@ -1,16 +1,14 @@
-import { HeaderItem } from "../../../models/HeaderItem";
+import { HeaderItem } from '../../../models/HeaderItem';
 
 /**
  * Search service
  */
-export class SearchService
-{
+export class SearchService {
     /**
      * Gets header items
-     * @returns header items 
+     * @returns header items
      */
-    public static GetHeaderItems(): Array<HeaderItem>
-    {
+    public static GetHeaderItems(): Array<HeaderItem> {
         let items: Array<HeaderItem> = [];
         items.push({ name: 'Автор', align: 'left' });
         items.push({ name: 'Тема', align: 'right' });

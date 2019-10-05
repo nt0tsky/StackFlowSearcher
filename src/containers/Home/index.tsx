@@ -8,12 +8,13 @@ import {
     Typography,
     ExpansionPanelDetails,
     Table,
-    TableBody
+    TableBody,
+    LinearProgress
 } from '@material-ui/core';
 import SearchInput from '../SearchInput';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { SearchAction } from '../../store/search/actions';
+import { SearchAction } from '../../store/searchinput/actions';
 import { ToResultsAction } from '../../store/navigation/actions';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -24,6 +25,7 @@ interface IHome {
     lastSearch: Array<string>;
     searchAction: (text: string) => void;
     toResultsAction: (text: string) => void;
+    fetching: boolean;
 }
 
 class Home extends React.Component<IHome> {
@@ -95,6 +97,7 @@ class Home extends React.Component<IHome> {
                             placeholder='Искать на stackoverflow'
                             onSearch={this.handleSearch}
                         />
+                        {this.props.fetching && <LinearProgress />}
                     </Grid>
                     <Grid item xs={12}>
                         {this.lastSearch()}
@@ -106,7 +109,8 @@ class Home extends React.Component<IHome> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    lastSearch: state.search.lastSearch
+    lastSearch: state.searchInput.lastSearch,
+    fetching: state.searchInput.fetching
 });
 
 const mapDispatchToProps = (dispatch: any) => {

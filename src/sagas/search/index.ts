@@ -1,13 +1,14 @@
 import { put, takeLatest, call } from 'redux-saga/effects';
-import { SEARCH, OWNER_QUESTIONS_SEARCH } from '../../store/search/types';
+import { SEARCH } from '../../store/searchinput/types';
 import { BaseAction } from '../../store/common/BaseAction';
 import Axios from 'axios';
 import {
     ResponseReceivedAction,
-    SaveLatestSearchAction,
-    ResponseReceivedOwnerQuestions
-} from '../../store/search/actions';
+    SaveLatestSearchAction
+} from '../../store/searchinput/actions';
 import { ToResultsAction } from '../../store/navigation/actions';
+import { ReceivedOwnerQuestions } from '../../store/search/actions';
+import { OWNER_QUESTIONS_SEARCH } from '../../store/search/types';
 
 /**
  * Searchs saga
@@ -27,7 +28,10 @@ function* handleOwnerQuestionsSearch(action: BaseAction) {
     });
 
     if (data.data && data.data.items) {
-        yield put(ResponseReceivedOwnerQuestions(data.data.items));
+        const value = yield put(ReceivedOwnerQuestions(data.data.items));
+        if (value.ok) {
+            console.log('yo');
+        }
     }
 }
 

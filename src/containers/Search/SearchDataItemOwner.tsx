@@ -73,7 +73,11 @@ const SearchDataItemOwner: FC<ISearchDataItemOwner> = (
 
     return (
         <Tooltip title={props.owner.display_name}>
-            <Avatar {...attrs} className={`${classes.avatar} owner-picture`} onClick={props.onClick}>
+            <Avatar
+                {...attrs}
+                className={`${classes.avatar} owner-picture`}
+                onClick={props.onClick}
+            >
                 <Typography variant='caption'>{shortName()}</Typography>
             </Avatar>
         </Tooltip>

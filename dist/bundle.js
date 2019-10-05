@@ -42940,7 +42940,7 @@ exports.push([module.i, ".loadComponent-appear {\n  opacity: 0;\n}\n.loadCompone
 
 exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js")(false);
 // Module
-exports.push([module.i, ".home-button {\n  color: #303f9f;\n  border: 1px solid #eaeaea;\n  cursor: pointer;\n  opacity: 0.65;\n  margin: 10px 10px 0 0;\n}\n.home-button:hover {\n  opacity: 1;\n}\n.search-result-row {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n}\n.search-data .user-display-name {\n  max-width: 40px;\n}\n.search-data .hidden {\n  display: none;\n}\n.search-data .owner-picture {\n  cursor: pointer;\n}\n.search-data .chip-item {\n  margin: 2px;\n}\n.search-data .chip-back {\n  float: right;\n  position: relative;\n  top: 8px;\n  right: 8px;\n}\n.search-data .search-data-item:hover {\n  cursor: pointer;\n}\n", ""]);
+exports.push([module.i, ".home-button {\n  color: #303f9f;\n  border: 1px solid #eaeaea;\n  cursor: pointer;\n  opacity: 0.65;\n  margin: 10px 10px 0 0;\n}\n.home-button:hover {\n  opacity: 1;\n}\n.search-result-row {\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n}\n.search-data .user-display-name {\n  max-width: 40px;\n}\n.search-data.secondary-paper {\n  background-color: #f7f7f7;\n  margin-bottom: 10px;\n}\n.search-data .hidden {\n  display: none;\n}\n.search-data .owner-picture {\n  cursor: pointer;\n}\n.search-data .chip-item {\n  margin: 2px;\n}\n.search-data .chip-back {\n  float: right;\n  position: relative;\n  top: 8px;\n  right: 8px;\n}\n.search-data .search-data-item:hover {\n  cursor: pointer;\n}\n", ""]);
 
 
 /***/ }),
@@ -91830,8 +91830,8 @@ var App = (function (_super) {
     return App;
 }(React.Component));
 var mapStateToProps = function (state) { return ({
-    searchString: state.search.searchString,
-    lastSearch: state.search.lastSearch
+    searchString: state.searchInput.searchString,
+    lastSearch: state.searchInput.lastSearch
 }); };
 var mapDispatchToProps = function (dispatch) {
     return redux_1.bindActionCreators({
@@ -91901,7 +91901,7 @@ var core_1 = __webpack_require__(/*! @material-ui/core */ "./node_modules/@mater
 var SearchInput_1 = __importDefault(__webpack_require__(/*! ../SearchInput */ "./src/containers/SearchInput/index.tsx"));
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-var actions_1 = __webpack_require__(/*! ../../store/search/actions */ "./src/store/search/actions.ts");
+var actions_1 = __webpack_require__(/*! ../../store/searchinput/actions */ "./src/store/searchinput/actions.ts");
 var actions_2 = __webpack_require__(/*! ../../store/navigation/actions */ "./src/store/navigation/actions.ts");
 var react_addons_css_transition_group_1 = __importDefault(__webpack_require__(/*! react-addons-css-transition-group */ "./node_modules/react-addons-css-transition-group/index.js"));
 var ExpandMore_1 = __importDefault(__webpack_require__(/*! @material-ui/icons/ExpandMore */ "./node_modules/@material-ui/icons/ExpandMore.js"));
@@ -91945,7 +91945,7 @@ var Home = (function (_super) {
     return Home;
 }(react_1.default.Component));
 var mapStateToProps = function (state) { return ({
-    lastSearch: state.search.lastSearch
+    lastSearch: state.searchInput.lastSearch
 }); };
 var mapDispatchToProps = function (dispatch) {
     return redux_1.bindActionCreators({
@@ -91987,90 +91987,71 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 var core_1 = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
-var SearchDataHeader_1 = __webpack_require__(/*! ./SearchDataHeader */ "./src/containers/Search/SearchDataHeader.tsx");
-var SearchDataItem_1 = __webpack_require__(/*! ./SearchDataItem */ "./src/containers/Search/SearchDataItem.tsx");
-var Face_1 = __importDefault(__webpack_require__(/*! @material-ui/icons/Face */ "./node_modules/@material-ui/icons/Face.js"));
-var SelectedItemDTO_1 = __webpack_require__(/*! ./models/SelectedItemDTO */ "./src/containers/Search/models/SelectedItemDTO.ts");
 var actions_1 = __webpack_require__(/*! ../../store/search/actions */ "./src/store/search/actions.ts");
+var SearchService_1 = __webpack_require__(/*! ./services/SearchService */ "./src/containers/Search/services/SearchService.ts");
+var SearchDataTable_1 = __webpack_require__(/*! ./SearchDataTable */ "./src/containers/Search/SearchDataTable.tsx");
 var SearchData = (function (_super) {
     __extends(SearchData, _super);
     function SearchData(props) {
         var _this = _super.call(this, props) || this;
-        _this.handleChangePage = function (event, newPage) {
-            _this.setState({
-                page: newPage
-            });
-        };
-        _this.handleChangeRowsPerPage = function (event) {
-            _this.setState({
-                rowsPerPage: parseInt(event.target.value, 10)
-            });
-        };
         _this.handleSelectDataItem = function (item) {
+            setTimeout(function () {
+                if (_this.state.loaderQuestions &&
+                    !_this.props.ownerQuestions.length) {
+                    console.log("che to ne tak s set'u!");
+                }
+            }, 3000);
+            _this.setState({
+                loaderQuestions: true
+            });
             _this.props.ownerQuestionsSearch(item.item.owner.user_id);
-            _this.setState({
-                selectedItem: item
-            });
         };
-        _this.renderItems = function () {
-            var startIdx = _this.state.page * _this.state.rowsPerPage + (_this.state.selectedItem.index ? _this.state.selectedItem.index : 0);
-            var endIdx = startIdx + (_this.state.selectedItem.selected ? 1 : _this.state.rowsPerPage);
-            return _this.props.searchItems.slice(startIdx, endIdx).map(function (val, idx) {
-                var index = _this.state.selectedItem.selected ? _this.state.selectedItem.index : idx;
-                return (React.createElement(SearchDataItem_1.SearchDataItem, { key: "data-item-" + idx, index: index, item: val, selected: _this.state.selectedItem.selected, onSelectDataItem: _this.handleSelectDataItem }));
-            });
-        };
-        _this.handleUnselect = function () {
-            _this.setState({
-                selectedItem: new SelectedItemDTO_1.SelectedItemDTO()
-            });
+        _this.handleRemoveFilter = function () {
+            _this.props.ownerQuestionsClear();
         };
         _this.state = {
-            page: 0,
-            rowsPerPage: 5,
             searchText: props.searchText,
-            selectedItem: new SelectedItemDTO_1.SelectedItemDTO()
+            loaderQuestions: false
         };
         return _this;
     }
     SearchData.prototype.componentDidUpdate = function () {
         if (this.state.searchText != this.props.searchText) {
             this.setState({
-                page: 0,
                 searchText: this.props.searchText
+            });
+        }
+        if (this.props.ownerQuestions.length && this.state.loaderQuestions) {
+            this.setState({
+                loaderQuestions: false
             });
         }
     };
     SearchData.prototype.render = function () {
+        var baseClasses = "search-data " + (this.props.ownerQuestions.length ? 'secondary-paper' : '');
         return (React.createElement(core_1.Grid, { container: true },
             React.createElement(core_1.Grid, { item: true, xs: 12 },
-                React.createElement(core_1.Paper, { className: 'search-data' },
-                    this.state.selectedItem.selected &&
-                        React.createElement(core_1.Chip, { icon: React.createElement(Face_1.default, null), label: "\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C", onDelete: this.handleUnselect, size: "small", className: "chip-back" }),
-                    React.createElement(core_1.Table, { size: 'small' },
-                        React.createElement(SearchDataHeader_1.SearchDataHeader, { headerItems: this.props.headerItems }),
-                        React.createElement(core_1.TableBody, null, this.renderItems())),
-                    React.createElement(core_1.TablePagination, { rowsPerPageOptions: [], colSpan: 3, component: 'div', className: this.state.selectedItem.selected ? "hidden" : "", count: this.props.searchItems
-                            ? this.props.searchItems.length
-                            : 0, rowsPerPage: this.state.rowsPerPage, page: this.state.page, onChangePage: this.handleChangePage, onChangeRowsPerPage: this.handleChangeRowsPerPage }))),
-            React.createElement(core_1.Grid, { item: true, xs: 12 }, "hello dude")));
+                React.createElement(core_1.Paper, { className: baseClasses },
+                    React.createElement(SearchDataTable_1.SearchDataTable, { headerItems: SearchService_1.SearchService.GetHeaderItems(), searchItems: this.props.searchItems, onSelectDataItem: this.handleSelectDataItem, onRemoveFilter: this.handleRemoveFilter, hideOnSelect: true }))),
+            React.createElement(core_1.Grid, { item: true, xs: 12 },
+                this.state.loaderQuestions && React.createElement(core_1.LinearProgress, null),
+                this.props.ownerQuestions.length > 0 && (React.createElement(core_1.Paper, { className: 'search-data' },
+                    React.createElement(SearchDataTable_1.SearchDataTable, { headerItems: SearchService_1.SearchService.GetHeaderItems(), searchItems: this.props.ownerQuestions, hideOnSelect: false }))))));
     };
     return SearchData;
 }(React.Component));
 var mapStateToProps = function (state) { return ({
-    ownerQuestions: state.search.ownerQuestions
+    ownerQuestions: state.search.ownerItems
 }); };
 var mapDispatchToProps = function (dispatch) {
     return redux_1.bindActionCreators({
-        ownerQuestionsSearch: actions_1.OwnerQuestionsSearch
+        ownerQuestionsSearch: actions_1.OwnerQuestionsSearch,
+        ownerQuestionsClear: actions_1.OwnerQuestionsClear
     }, dispatch);
 };
 exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(SearchData);
@@ -92174,7 +92155,7 @@ var SearchDataItem = (function (_super) {
     SearchDataItem.prototype.render = function () {
         var item = this.props.item;
         var title = unescape(item.title);
-        return (react_1.default.createElement(core_1.TableRow, { onClick: this.handleTitleClick, className: "search-data-item", hover: true, selected: this.props.selected, key: item.title + "_{idx}" },
+        return (react_1.default.createElement(core_1.TableRow, { onClick: this.handleTitleClick, className: 'search-data-item', hover: true, selected: this.props.selected, key: item.title + "_{idx}" },
             react_1.default.createElement(core_1.TableCell, { key: item.owner.display_name + "_display_name", component: 'th', scope: 'row', className: 'user-display-name' },
                 react_1.default.createElement(SearchDataItemOwner_1.SearchDataItemOwner, { index: this.props.index, owner: item.owner, onClick: this.handleClickOwner })),
             react_1.default.createElement(core_1.TableCell, { key: item.title + "_title", align: 'right' },
@@ -92282,6 +92263,110 @@ exports.SearchDataItemOwner = function (props) {
 
 /***/ }),
 
+/***/ "./src/containers/Search/SearchDataTable.tsx":
+/*!***************************************************!*\
+  !*** ./src/containers/Search/SearchDataTable.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var core_1 = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+var SearchDataHeader_1 = __webpack_require__(/*! ./SearchDataHeader */ "./src/containers/Search/SearchDataHeader.tsx");
+var SelectedItemDTO_1 = __webpack_require__(/*! ./models/SelectedItemDTO */ "./src/containers/Search/models/SelectedItemDTO.ts");
+var SearchDataItem_1 = __webpack_require__(/*! ./SearchDataItem */ "./src/containers/Search/SearchDataItem.tsx");
+var Face_1 = __importDefault(__webpack_require__(/*! @material-ui/icons/Face */ "./node_modules/@material-ui/icons/Face.js"));
+var SearchDataTable = (function (_super) {
+    __extends(SearchDataTable, _super);
+    function SearchDataTable(props) {
+        var _this = _super.call(this, props) || this;
+        _this.handleChangePage = function (event, newPage) {
+            _this.setState({
+                page: newPage,
+                selectedItem: new SelectedItemDTO_1.SelectedItemDTO()
+            });
+        };
+        _this.handleSelectDataItem = function (item, idx) {
+            var selectedItem = {
+                index: idx,
+                item: item,
+                selected: true
+            };
+            if (_this.props.hideOnSelect) {
+                _this.setState({
+                    selectedItem: selectedItem
+                });
+            }
+            if (_this.props.onSelectDataItem) {
+                _this.props.onSelectDataItem(selectedItem);
+            }
+        };
+        _this.renderItems = function () {
+            var startIdx = _this.state.page * _this.state.rowsPerPage +
+                (_this.state.selectedItem.index ? _this.state.selectedItem.index : 0);
+            var endIdx = startIdx +
+                (_this.state.selectedItem.selected ? 1 : _this.state.rowsPerPage);
+            return _this.props.searchItems
+                .slice(startIdx, endIdx)
+                .map(function (val, idx) {
+                var index = _this.state.selectedItem.selected
+                    ? _this.state.selectedItem.index
+                    : idx;
+                return (react_1.default.createElement(SearchDataItem_1.SearchDataItem, { key: "data-item-" + idx, index: index, item: val, selected: _this.state.selectedItem.selected, onSelectDataItem: function () {
+                        return _this.handleSelectDataItem(val, idx);
+                    } }));
+            });
+        };
+        _this.filterReset = function () {
+            _this.setState({
+                selectedItem: new SelectedItemDTO_1.SelectedItemDTO()
+            });
+            if (_this.props.onRemoveFilter) {
+                _this.props.onRemoveFilter();
+            }
+        };
+        _this.state = {
+            page: 0,
+            rowsPerPage: 5,
+            selectedItem: new SelectedItemDTO_1.SelectedItemDTO()
+        };
+        return _this;
+    }
+    SearchDataTable.prototype.render = function () {
+        return (react_1.default.createElement(react_1.default.Fragment, null,
+            this.props.hideOnSelect &&
+                this.state.selectedItem.selected && (react_1.default.createElement(core_1.Chip, { icon: react_1.default.createElement(Face_1.default, null), label: '\u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C', onDelete: this.filterReset, size: 'small', className: 'chip-back' })),
+            react_1.default.createElement(core_1.Table, { size: 'small' },
+                react_1.default.createElement(SearchDataHeader_1.SearchDataHeader, { headerItems: this.props.headerItems }),
+                react_1.default.createElement(core_1.TableBody, null, this.renderItems())),
+            react_1.default.createElement(core_1.TablePagination, { rowsPerPageOptions: [], colSpan: 3, component: 'div', count: this.props.searchItems.length, rowsPerPage: this.state.rowsPerPage, page: this.state.page, onChangePage: this.handleChangePage })));
+    };
+    return SearchDataTable;
+}(react_1.default.Component));
+exports.SearchDataTable = SearchDataTable;
+
+
+/***/ }),
+
 /***/ "./src/containers/Search/index.less":
 /*!******************************************!*\
   !*** ./src/containers/Search/index.less ***!
@@ -92341,7 +92426,7 @@ var SearchInput_1 = __importDefault(__webpack_require__(/*! ../SearchInput */ ".
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var actions_1 = __webpack_require__(/*! ../../store/result/actions */ "./src/store/result/actions.ts");
-var actions_2 = __webpack_require__(/*! ../../store/search/actions */ "./src/store/search/actions.ts");
+var actions_2 = __webpack_require__(/*! ../../store/searchinput/actions */ "./src/store/searchinput/actions.ts");
 var react_router_1 = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
 var react_addons_css_transition_group_1 = __importDefault(__webpack_require__(/*! react-addons-css-transition-group */ "./node_modules/react-addons-css-transition-group/index.js"));
 __webpack_require__(/*! ./index.less */ "./src/containers/Search/index.less");
@@ -92377,8 +92462,8 @@ var Search = (function (_super) {
     return Search;
 }(react_1.default.Component));
 var mapStateToProps = function (state) { return ({
-    searchString: state.search.searchString,
-    SearchItems: state.search.SearchItems
+    searchString: state.searchInput.searchString,
+    SearchItems: state.searchInput.SearchItems
 }); };
 var mapDispatchToProps = function (dispatch) {
     return redux_1.bindActionCreators({
@@ -92506,7 +92591,7 @@ var SearchInput = (function (_super) {
     return SearchInput;
 }(react_1.default.Component));
 var mapStateToProps = function (state) { return ({
-    searchString: state.search.searchString
+    searchString: state.searchInput.searchString
 }); };
 exports.default = react_redux_1.connect(mapStateToProps, null)(SearchInput);
 
@@ -92828,17 +92913,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var effects_1 = __webpack_require__(/*! redux-saga/effects */ "./node_modules/redux-saga/dist/redux-saga-effects-npm-proxy.esm.js");
-var types_1 = __webpack_require__(/*! ../../store/search/types */ "./src/store/search/types.ts");
+var types_1 = __webpack_require__(/*! ../../store/searchinput/types */ "./src/store/searchinput/types.ts");
 var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
-var actions_1 = __webpack_require__(/*! ../../store/search/actions */ "./src/store/search/actions.ts");
+var actions_1 = __webpack_require__(/*! ../../store/searchinput/actions */ "./src/store/searchinput/actions.ts");
 var actions_2 = __webpack_require__(/*! ../../store/navigation/actions */ "./src/store/navigation/actions.ts");
+var actions_3 = __webpack_require__(/*! ../../store/search/actions */ "./src/store/search/actions.ts");
+var types_2 = __webpack_require__(/*! ../../store/search/types */ "./src/store/search/types.ts");
 function watchSearch() {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4, effects_1.takeLatest(types_1.SEARCH, handleSearch)];
             case 1:
                 _a.sent();
-                return [4, effects_1.takeLatest(types_1.OWNER_QUESTIONS_SEARCH, handleOwnerQuestionsSearch)];
+                return [4, effects_1.takeLatest(types_2.OWNER_QUESTIONS_SEARCH, handleOwnerQuestionsSearch)];
             case 2:
                 _a.sent();
                 return [2];
@@ -92859,8 +92946,12 @@ function handleOwnerQuestionsSearch(action) {
                 })];
             case 1:
                 data = _a.sent();
-                debugger;
-                return [2];
+                if (!(data.data && data.data.items)) return [3, 3];
+                return [4, effects_1.put(actions_3.ReceivedOwnerQuestions(data.data.items))];
+            case 2:
+                _a.sent();
+                _a.label = 3;
+            case 3: return [2];
         }
     });
 }
@@ -92925,14 +93016,16 @@ var redux_saga_1 = __importDefault(__webpack_require__(/*! redux-saga */ "./node
 var connected_react_router_1 = __webpack_require__(/*! connected-react-router */ "./node_modules/connected-react-router/esm/index.js");
 var history_1 = __webpack_require__(/*! history */ "./node_modules/history/esm/history.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
-var reducers_1 = __webpack_require__(/*! ./search/reducers */ "./src/store/search/reducers.ts");
+var reducers_1 = __webpack_require__(/*! ./searchinput/reducers */ "./src/store/searchinput/reducers.ts");
+var reducers_2 = __webpack_require__(/*! ./search/reducers */ "./src/store/search/reducers.ts");
 var sagas_1 = __webpack_require__(/*! ../sagas */ "./src/sagas/index.ts");
 exports.history = history_1.createBrowserHistory();
 var sagaMiddleware = redux_saga_1.default();
 var middleware = [sagaMiddleware, connected_react_router_1.routerMiddleware(exports.history)];
 var initialState = {};
 var rootReducer = redux_1.combineReducers({
-    search: reducers_1.searchReducer
+    searchInput: reducers_1.searchInputReducer,
+    search: reducers_2.searchReducer
 });
 var composedEnhancers = redux_1.compose(redux_1.applyMiddleware.apply(void 0, middleware));
 function configureStore() {
@@ -93029,21 +93122,17 @@ exports.REDIRECT_TO_HOME_ACTION = 'REDIRECT_TO_HOME_ACTION';
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = __webpack_require__(/*! ./types */ "./src/store/search/types.ts");
-exports.SearchAction = function (text) { return ({
-    type: types_1.SEARCH,
-    payload: text
-}); };
 exports.OwnerQuestionsSearch = function (userId) { return ({
     type: types_1.OWNER_QUESTIONS_SEARCH,
     payload: userId
 }); };
-exports.ResponseReceivedAction = function (items) { return ({
-    type: types_1.RESPONSE_RECEIVED,
-    payload: items
+exports.OwnerQuestionsClear = function () { return ({
+    type: types_1.OWNER_QUESTIONS_CLEAR,
+    payload: ''
 }); };
-exports.SaveLatestSearchAction = function (text) { return ({
-    type: types_1.SAVE_LATEST_SEARCH,
-    payload: text
+exports.ReceivedOwnerQuestions = function (items) { return ({
+    type: types_1.RECEIVED_OWNER_QUESTIONS,
+    payload: items
 }); };
 
 
@@ -93072,12 +93161,99 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = __webpack_require__(/*! ./types */ "./src/store/search/types.ts");
 var initialState = {
-    searchString: '',
-    SearchItems: [],
-    lastSearch: [],
-    ownerQuestions: []
+    ownerItems: []
 };
 function searchReducer(state, action) {
+    if (state === void 0) { state = initialState; }
+    switch (action.type) {
+        case types_1.OWNER_QUESTIONS_CLEAR: {
+            return __assign(__assign({}, state), { ownerItems: [] });
+        }
+        case types_1.RECEIVED_OWNER_QUESTIONS: {
+            return __assign(__assign({}, state), { ownerItems: action.payload });
+        }
+        default: {
+            return state;
+        }
+    }
+}
+exports.searchReducer = searchReducer;
+
+
+/***/ }),
+
+/***/ "./src/store/search/types.ts":
+/*!***********************************!*\
+  !*** ./src/store/search/types.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RECEIVED_OWNER_QUESTIONS = 'RECEIVED_OWNER_QUESTIONS';
+exports.OWNER_QUESTIONS_SEARCH = 'OWNER_QUESTIONS_SEARCH';
+exports.OWNER_QUESTIONS_CLEAR = 'OWNER_QUESTIONS_CLEAR';
+
+
+/***/ }),
+
+/***/ "./src/store/searchinput/actions.ts":
+/*!******************************************!*\
+  !*** ./src/store/searchinput/actions.ts ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var types_1 = __webpack_require__(/*! ./types */ "./src/store/searchinput/types.ts");
+exports.SearchAction = function (text) { return ({
+    type: types_1.SEARCH,
+    payload: text
+}); };
+exports.ResponseReceivedAction = function (items) { return ({
+    type: types_1.RESPONSE_RECEIVED,
+    payload: items
+}); };
+exports.SaveLatestSearchAction = function (text) { return ({
+    type: types_1.SAVE_LATEST_SEARCH,
+    payload: text
+}); };
+
+
+/***/ }),
+
+/***/ "./src/store/searchinput/reducers.ts":
+/*!*******************************************!*\
+  !*** ./src/store/searchinput/reducers.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var types_1 = __webpack_require__(/*! ./types */ "./src/store/searchinput/types.ts");
+var initialState = {
+    searchString: '',
+    SearchItems: [],
+    lastSearch: []
+};
+function searchInputReducer(state, action) {
     if (state === void 0) { state = initialState; }
     switch (action.type) {
         case types_1.SEARCH: {
@@ -93106,15 +93282,15 @@ function searchReducer(state, action) {
         }
     }
 }
-exports.searchReducer = searchReducer;
+exports.searchInputReducer = searchInputReducer;
 
 
 /***/ }),
 
-/***/ "./src/store/search/types.ts":
-/*!***********************************!*\
-  !*** ./src/store/search/types.ts ***!
-  \***********************************/
+/***/ "./src/store/searchinput/types.ts":
+/*!****************************************!*\
+  !*** ./src/store/searchinput/types.ts ***!
+  \****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -93122,7 +93298,6 @@ exports.searchReducer = searchReducer;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SEARCH = 'SEARCH';
-exports.OWNER_QUESTIONS_SEARCH = 'OWNER_QUESTIONS_SEARCH';
 exports.RESPONSE_RECEIVED = 'RESPONSE_RECEIVED';
 exports.SAVE_LATEST_SEARCH = 'SAVE_LATEST_SEARCH';
 

@@ -2,9 +2,11 @@ import createSagaMiddleware from 'redux-saga';
 import { routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import SearchState from './search/types';
-import { searchReducer } from './search/reducers';
+import SearchInputState from './searchinput/types';
+import { searchInputReducer } from './searchinput/reducers';
+import { searchReducer } from "./search/reducers";
 import { sagaInitial } from '../sagas';
+import { SearchState } from './search/types';
 
 export const history = createBrowserHistory();
 const sagaMiddleware = createSagaMiddleware();
@@ -12,12 +14,14 @@ const sagaMiddleware = createSagaMiddleware();
 const middleware = [sagaMiddleware, routerMiddleware(history)];
 
 export interface State {
-    search: SearchState;
+    searchInput: SearchInputState;
+    search: SearchState
 }
 
 const initialState = {};
 
 const rootReducer = combineReducers<State>({
+    searchInput: searchInputReducer,
     search: searchReducer
 });
 

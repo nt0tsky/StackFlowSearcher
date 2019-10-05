@@ -1,10 +1,10 @@
-import React from "react";
-import { Table, TableBody, TablePagination, Chip } from "@material-ui/core";
-import { SearchDataHeader } from "./SearchDataHeader";
-import { HeaderItem } from "../../models/HeaderItem";
-import { SearchItem } from "../../models/SearchItem";
-import { SelectedItemDTO } from "./models/SelectedItemDTO";
-import { SearchDataItem } from "./SearchDataItem";
+import React from 'react';
+import { Table, TableBody, TablePagination, Chip } from '@material-ui/core';
+import { SearchDataHeader } from './SearchDataHeader';
+import { HeaderItem } from '../../models/HeaderItem';
+import { SearchItem } from '../../models/SearchItem';
+import { SelectedItemDTO } from './models/SelectedItemDTO';
+import { SearchDataItem } from './SearchDataItem';
 import FaceIcon from '@material-ui/icons/Face';
 
 /**
@@ -30,8 +30,10 @@ interface ISearchDataTableState {
 /**
  * Search data table
  */
-export class SearchDataTable extends React.Component<ISearchDataTable, ISearchDataTableState>
-{
+export class SearchDataTable extends React.Component<
+    ISearchDataTable,
+    ISearchDataTableState
+> {
     /**
      *
      */
@@ -41,7 +43,7 @@ export class SearchDataTable extends React.Component<ISearchDataTable, ISearchDa
             page: 0,
             rowsPerPage: 5,
             selectedItem: new SelectedItemDTO()
-        }
+        };
     }
 
     /**
@@ -69,33 +71,41 @@ export class SearchDataTable extends React.Component<ISearchDataTable, ISearchDa
         if (this.props.hideOnSelect) {
             this.setState({
                 selectedItem: selectedItem
-            })
+            });
         }
         if (this.props.onSelectDataItem) {
             this.props.onSelectDataItem(selectedItem);
         }
-    }
+    };
 
     /**
      * Render items of search data
      */
     renderItems = () => {
-        const startIdx: number = this.state.page * this.state.rowsPerPage + (this.state.selectedItem.index ? this.state.selectedItem.index : 0);
-        const endIdx: number = startIdx + (this.state.selectedItem.selected ? 1: this.state.rowsPerPage);
-        return this.props.searchItems.slice(startIdx, endIdx).map(
-            (val, idx) => {
-                const index: number = this.state.selectedItem.selected  ? this.state.selectedItem.index : idx;
+        const startIdx: number =
+            this.state.page * this.state.rowsPerPage +
+            (this.state.selectedItem.index ? this.state.selectedItem.index : 0);
+        const endIdx: number =
+            startIdx +
+            (this.state.selectedItem.selected ? 1 : this.state.rowsPerPage);
+        return this.props.searchItems
+            .slice(startIdx, endIdx)
+            .map((val, idx) => {
+                const index: number = this.state.selectedItem.selected
+                    ? this.state.selectedItem.index
+                    : idx;
                 return (
                     <SearchDataItem
                         key={`data-item-${idx}`}
                         index={index}
                         item={val}
                         selected={this.state.selectedItem.selected}
-                        onSelectDataItem={() => this.handleSelectDataItem(val, idx)}
+                        onSelectDataItem={() =>
+                            this.handleSelectDataItem(val, idx)
+                        }
                     />
                 );
-            }
-        );
+            });
     };
 
     /**
@@ -104,29 +114,30 @@ export class SearchDataTable extends React.Component<ISearchDataTable, ISearchDa
     filterReset = () => {
         this.setState({
             selectedItem: new SelectedItemDTO()
-        })
+        });
 
         if (this.props.onRemoveFilter) {
             this.props.onRemoveFilter();
         }
-    }
+    };
 
     /**
      * Renders search data table
-     * @returns  
+     * @returns
      */
     render() {
-        return(
+        return (
             <>
-                {this.props.hideOnSelect && this.state.selectedItem.selected && 
-                <Chip 
-                    icon={<FaceIcon />}
-                    label="Сбросить"
-                    onDelete={this.filterReset}
-                    size="small"
-                    className="chip-back"
-
-                />}
+                {this.props.hideOnSelect &&
+                    this.state.selectedItem.selected && (
+                        <Chip
+                            icon={<FaceIcon />}
+                            label='Сбросить'
+                            onDelete={this.filterReset}
+                            size='small'
+                            className='chip-back'
+                        />
+                    )}
                 <Table size='small'>
                     <SearchDataHeader headerItems={this.props.headerItems} />
                     <TableBody>{this.renderItems()}</TableBody>
@@ -141,6 +152,6 @@ export class SearchDataTable extends React.Component<ISearchDataTable, ISearchDa
                     onChangePage={this.handleChangePage}
                 />
             </>
-        )
+        );
     }
 }

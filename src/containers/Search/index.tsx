@@ -1,12 +1,12 @@
 import React from 'react';
-import { Grid, LinearProgress } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import SearchInput from '../SearchInput';
 import { RootState } from '../../store';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { MovebackAction } from '../../store/result/actions';
 import { SearchItem } from '../../models/SearchItem';
-import { SearchAction } from '../../store/search/actions';
+import { SearchAction } from '../../store/searchinput/actions';
 import { withRouter, RouteComponentProps } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
@@ -101,8 +101,8 @@ class Search extends React.Component<ISearch, ISearchState> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    searchString: state.search.searchString,
-    SearchItems: state.search.SearchItems
+    searchString: state.searchInput.searchString,
+    SearchItems: state.searchInput.SearchItems
 });
 
 const mapDispatchToProps = (dispatch: any) => {

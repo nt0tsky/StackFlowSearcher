@@ -3,10 +3,7 @@ import { RootState } from '../../store';
 import './index.less';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-    Grid,
-    Container,
-    CssBaseline} from '@material-ui/core';
+import { Grid, Container, CssBaseline } from '@material-ui/core';
 import Routes from '../routes';
 import { MovebackAction } from '../../store/result/actions';
 
@@ -76,8 +73,8 @@ class App extends React.Component<IApp> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    searchString: state.search.searchString,
-    lastSearch: state.search.lastSearch
+    searchString: state.searchInput.searchString,
+    lastSearch: state.searchInput.lastSearch
 });
 
 const mapDispatchToProps = (dispatch: any) => {

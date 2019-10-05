@@ -1,4 +1,4 @@
-import { SearchOwner } from "./SearchOwner";
+import { SearchOwner } from './SearchOwner';
 
 /**
  * Question item
