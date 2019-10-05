@@ -10,4 +10,5 @@ interface ISearchTopics {
     q?: string;
     tab?: string;
     user?: number;
+    tagged?: string;
 }

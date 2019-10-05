@@ -4,7 +4,17 @@ import { BaseAction } from '../common/BaseAction';
 
 export interface SearchState extends IFetchable {
     ownerItems: Array<SearchItem>;
+    tagItems: Array<SearchItem>;
 }
+
+export const TAG_FAMOUS_RECEIVED = 'TAG_FAMOUS_RECEIVED';
+export type TAG_FAMOUS_RECEIVED = typeof TAG_FAMOUS_RECEIVED;
+
+export const TAG_FAMOUS_SEARCH = 'TAG_FAMOUS_SEARCH';
+export type TAG_FAMOUS_SEARCH = typeof TAG_FAMOUS_SEARCH;
+
+export const TAG_FAMOUS_CLEAR = 'TAG_FAMOUS_CLEAR';
+export type TAG_FAMOUS_CLEAR = typeof TAG_FAMOUS_CLEAR;
 
 export const RECEIVED_OWNER_QUESTIONS = 'RECEIVED_OWNER_QUESTIONS';
 export type RECEIVED_OWNER_QUESTIONS = typeof RECEIVED_OWNER_QUESTIONS;
@@ -18,7 +28,10 @@ export type OWNER_QUESTIONS_CLEAR = typeof OWNER_QUESTIONS_CLEAR;
 export type SearchActionTypes =
     | RECEIVED_OWNER_QUESTIONS
     | OWNER_QUESTIONS_SEARCH
-    | OWNER_QUESTIONS_CLEAR;
+    | OWNER_QUESTIONS_CLEAR
+    | TAG_FAMOUS_SEARCH
+    | TAG_FAMOUS_RECEIVED
+    | TAG_FAMOUS_CLEAR;
 
 export interface SearchAction extends BaseAction {
     type: SearchActionTypes;

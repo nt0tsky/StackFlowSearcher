@@ -12,7 +12,9 @@ import { SelectedItemDTO } from './models/SelectedItemDTO';
 import { RootState } from '../../store';
 import {
     OwnerQuestionsSearch,
-    OwnerQuestionsClear
+    OwnerQuestionsClear,
+    TagFamousSearch,
+    TagFamousClear
 } from '../../store/search/actions';
 import { SearchService } from './services/SearchService';
 import { SearchDataTable } from './SearchDataTable';
@@ -23,11 +25,14 @@ import { SearchDataTable } from './SearchDataTable';
 interface ISearchData {
     headerItems: Array<HeaderItem>;
     searchItems: Array<SearchItem>;
+    tagItems: Array<SearchItem>;
     searchText: string;
     fetching: boolean;
     ownerQuestions: Array<SearchItem>;
     ownerQuestionsSearch: (userId: number) => void;
     ownerQuestionsClear: () => void;
+    tagSearch: (name: string) => void;
+    tagFamousClear: () => void;
 }
 
 /**
@@ -55,15 +60,34 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
      * Handle select data item of search data
      */
     handleSelectDataItem = (item: SelectedItemDTO) => {
-        this.props.ownerQuestionsSearch(item.item.owner.user_id);
+        if (this.props.ownerQuestionsSearch) {
+            this.props.ownerQuestionsSearch(item.item.owner.user_id);
+        }
     };
+
+    /**
+     * Handle select tag item of search data
+     */
+    handleSelectTagItem = (name: string) => {
+        if (this.props.tagSearch) {
+            this.props.tagSearch(name);
+        }
+    }
 
     /**
      * Handle remove filter of search data
      */
     handleRemoveFilter = () => {
         this.props.ownerQuestionsClear();
+        this.handleRemoveTagFilter();
     };
+
+    /**
+     * Handle remove tag filter of search data
+     */
+    handleRemoveTagFilter = () => {
+        this.props.tagFamousClear();
+    }
 
     /**
      * Components did update
@@ -92,8 +116,10 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
                             headerItems={SearchService.GetHeaderItems()}
                             searchItems={this.props.searchItems}
                             onSelectDataItem={this.handleSelectDataItem}
+                            onSelectTagItem={this.handleSelectTagItem}
                             onRemoveFilter={this.handleRemoveFilter}
                             hideOnSelect={true}
+                            label={"Результаты поиска"}
                         />
                     </Paper>
                 </Grid>
@@ -105,7 +131,27 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
                             <SearchDataTable
                                 headerItems={SearchService.GetHeaderItems()}
                                 searchItems={this.props.ownerQuestions}
-                                hideOnSelect={false}
+                                onSelectDataItem={this.handleSelectDataItem}
+                                onSelectTagItem={this.handleSelectTagItem}
+                                onRemoveFilter={this.handleRemoveFilter}
+                                hideOnSelect={true}
+                                label={"Наиболее популярные вопросы автора"}
+                            />
+                        </Paper>
+                    )}
+                </Grid>
+                <Grid item xs={12}>
+                    {this.props.fetching && <LinearProgress />}
+                    {this.props.tagItems.length > 0 && (
+                        <Paper className='search-data'>
+                            <SearchDataTable
+                                headerItems={SearchService.GetHeaderItems()}
+                                searchItems={this.props.tagItems}
+                                onSelectDataItem={this.handleSelectDataItem}
+                                onSelectTagItem={this.handleSelectTagItem}
+                                onRemoveFilter={this.handleRemoveTagFilter}
+                                hideOnSelect={true}
+                                label={"Поиск по тегам"}
                             />
                         </Paper>
                     )}
@@ -117,14 +163,17 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
 
 const mapStateToProps = (state: RootState) => ({
     ownerQuestions: state.search.ownerItems,
-    fetching: state.search.fetching
+    fetching: state.search.fetching,
+    tagItems: state.search.tagItems
 });
 
 const mapDispatchToProps = (dispatch: any) => {
     return bindActionCreators(
         {
             ownerQuestionsSearch: OwnerQuestionsSearch,
-            ownerQuestionsClear: OwnerQuestionsClear
+            ownerQuestionsClear: OwnerQuestionsClear,
+            tagSearch: TagFamousSearch,
+            tagFamousClear: TagFamousClear
         },
         dispatch
     );

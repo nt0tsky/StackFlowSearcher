@@ -23,7 +23,6 @@ function* handleToHome(action: BaseAction) {
 }
 
 function* handleToResults(action: BaseAction) {
-    debugger;
     const text = encodeURIComponent(action.payload);
     yield put(push(`/result/${text}`));
 }

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Table, TableBody, TablePagination, Chip } from '@material-ui/core';
+import { Table, TableBody, TablePagination, Chip, Typography } from '@material-ui/core';
 import { SearchDataHeader } from './SearchDataHeader';
 import { HeaderItem } from '../../models/HeaderItem';
 import { SearchItem } from '../../models/SearchItem';
 import { SelectedItemDTO } from './models/SelectedItemDTO';
 import { SearchDataItem } from './SearchDataItem';
 import FaceIcon from '@material-ui/icons/Face';
+import "./index.less";
 
 /**
  * Isearch data table
@@ -14,8 +15,10 @@ interface ISearchDataTable {
     headerItems: Array<HeaderItem>;
     searchItems: Array<SearchItem>;
     onSelectDataItem?: (item: SelectedItemDTO) => void;
+    onSelectTagItem?: (name: string) => void;
     onRemoveFilter?: () => void;
     hideOnSelect: boolean;
+    label?: string;
 }
 
 /**
@@ -59,10 +62,7 @@ export class SearchDataTable extends React.Component<
         });
     };
 
-    /**
-     * Handle select data item of search data table
-     */
-    handleSelectDataItem = (item: SearchItem, idx: number) => {
+    staySelectedItem = (item: SearchItem, idx: number) => {
         const selectedItem: SelectedItemDTO = {
             index: idx,
             item: item,
@@ -73,10 +73,29 @@ export class SearchDataTable extends React.Component<
                 selectedItem: selectedItem
             });
         }
+
+        return selectedItem;
+    }
+
+    /**
+     * Handle select data item of search data table
+     */
+    handleSelectDataItem = (item: SearchItem, idx: number) => {
+        const selectedItem = this.staySelectedItem(item, idx);
         if (this.props.onSelectDataItem) {
             this.props.onSelectDataItem(selectedItem);
         }
     };
+
+    /**
+     * Handle select tag item of search data table
+     */
+    handleSelectTagItem = (item: SearchItem, index: number, name: string) => {
+        this.staySelectedItem(item, index);
+        if (this.props.onSelectTagItem) {
+            this.props.onSelectTagItem(name);
+        }
+    }
 
     /**
      * Render items of search data
@@ -100,6 +119,7 @@ export class SearchDataTable extends React.Component<
                         index={index}
                         item={val}
                         selected={this.state.selectedItem.selected}
+                        onSelectTagItem={this.handleSelectTagItem}
                         onSelectDataItem={() =>
                             this.handleSelectDataItem(val, idx)
                         }
@@ -128,6 +148,7 @@ export class SearchDataTable extends React.Component<
     render() {
         return (
             <>
+                {this.props.label && <Typography className="datatable-label" variant="h6">{this.props.label}</Typography>}
                 {this.props.hideOnSelect &&
                     this.state.selectedItem.selected && (
                         <Chip

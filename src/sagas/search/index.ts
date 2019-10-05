@@ -7,8 +7,8 @@ import {
     SaveLatestSearchAction
 } from '../../store/searchinput/actions';
 import { ToResultsAction } from '../../store/navigation/actions';
-import { ReceivedOwnerQuestions } from '../../store/search/actions';
-import { OWNER_QUESTIONS_SEARCH } from '../../store/search/types';
+import { ReceivedOwnerQuestions, TagFamousReceived } from '../../store/search/actions';
+import { OWNER_QUESTIONS_SEARCH, TAG_FAMOUS_SEARCH } from '../../store/search/types';
 
 /**
  * Searchs saga
@@ -16,22 +16,33 @@ import { OWNER_QUESTIONS_SEARCH } from '../../store/search/types';
 export function* watchSearch() {
     yield takeLatest(SEARCH, handleSearch);
     yield takeLatest(OWNER_QUESTIONS_SEARCH, handleOwnerQuestionsSearch);
+    yield takeLatest(TAG_FAMOUS_SEARCH, handleTagSearch);
+}
+
+function* handleTagSearch(action: BaseAction) {
+    const data = yield advancedSearch({
+        site: 'stackoverflow',
+        key: process.env.APPLICATION_KEY,
+        sort: 'votes',
+        tagged: action.payload
+    });
+
+    if (data && data.data.items) {
+        yield put(TagFamousReceived(data.data.items));
+    }
 }
 
 function* handleOwnerQuestionsSearch(action: BaseAction) {
     const data = yield advancedSearch({
         site: 'stackoverflow',
         key: process.env.APPLICATION_KEY,
-        sort: 'activity',
+        sort: 'votes',
         user: action.payload,
         order: 'desc'
     });
 
     if (data.data && data.data.items) {
         const value = yield put(ReceivedOwnerQuestions(data.data.items));
-        if (value.ok) {
-            console.log('yo');
-        }
     }
 }
 

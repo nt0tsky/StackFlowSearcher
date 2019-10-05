@@ -3,6 +3,7 @@ import { SearchItem } from '../../models/SearchItem';
 import { TableRow, TableCell, Typography, Chip } from '@material-ui/core';
 import { SearchDataItemOwner } from './SearchDataItemOwner';
 import { SelectedItemDTO } from './models/SelectedItemDTO';
+import "./index.less";
 
 /**
  * Isearch data item
@@ -12,6 +13,7 @@ interface ISearchDataItem {
     index: number;
     selected: boolean;
     onSelectDataItem?: (item: SelectedItemDTO) => void;
+    onSelectTagItem?: (item: SearchItem, index: number, name: string) => void;
 }
 
 /**
@@ -38,6 +40,16 @@ export class SearchDataItem extends React.Component<ISearchDataItem> {
         this.handleTitleClick();
     };
 
+    
+    /**
+     * Handle click tag of search data item
+     */
+    handleClickTag = (item: SearchItem, index: number, name: string) => {
+        if (this.props.onSelectTagItem) {
+            this.props.onSelectTagItem(item, index, name);
+        }
+    }
+
     /**
      * Renders search data item
      * @returns
@@ -48,7 +60,6 @@ export class SearchDataItem extends React.Component<ISearchDataItem> {
 
         return (
             <TableRow
-                onClick={this.handleTitleClick}
                 className='search-data-item'
                 hover
                 selected={this.props.selected}
@@ -87,6 +98,7 @@ export class SearchDataItem extends React.Component<ISearchDataItem> {
                                     clickable
                                     component='a'
                                     label={val}
+                                    onClick={() => this.handleClickTag(this.props.item, this.props.index, val)}
                                 />
                             );
                         })}
