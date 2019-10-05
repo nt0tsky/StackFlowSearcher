@@ -54,7 +54,7 @@ function* handleSearch(action: BaseAction) {
     const data = yield advancedSearch({
         key: process.env.APPLICATION_KEY,
         site: 'stackoverflow',
-        tab: 'relevance',
+        tab: 'votes',
         q: action.payload
     });
     if (data.data && data.data.items) {

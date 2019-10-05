@@ -8,6 +8,9 @@ export type TO_HOME_ACTION = typeof TO_HOME_ACTION;
 export const TO_RESULTS_ACTION = 'TO_RESULTS_ACTION';
 export type TO_RESULTS_ACTION = typeof TO_RESULTS_ACTION;
 
+export const TO_DETAILS = 'TO_DETAILS';
+export type TO_DETAILS = typeof TO_DETAILS;
+
 export type NavigationActionsTypes = TO_HOME_ACTION | TO_RESULTS_ACTION;
 
 export interface NavigationActions extends BaseAction {

@@ -5,6 +5,9 @@ import { SearchDataItemOwner } from './SearchDataItemOwner';
 import { SelectedItemDTO } from './models/SelectedItemDTO';
 import './index.less';
 import { SelectedItemType } from './models/SelectedItemType';
+import { ToDetails } from '../../store/navigation/actions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 /**
  * Isearch data item
@@ -15,12 +18,13 @@ interface ISearchDataItem {
     selected: boolean;
     onSelectDataItem?: (item: SelectedItemDTO) => void;
     onSelectTagItem?: (item: SelectedItemDTO) => void;
+    toDetails: (questionId: number) => void;
 }
 
 /**
  * Search data item
  */
-export class SearchDataItem extends React.Component<ISearchDataItem> {
+class SearchDataItem extends React.Component<ISearchDataItem> {
     /**
      * Handle click owner of search data item
      */
@@ -60,6 +64,13 @@ export class SearchDataItem extends React.Component<ISearchDataItem> {
     };
 
     /**
+     * Handle click content of search data item
+     */
+    handleClickContent = () => {
+        this.props.toDetails(this.props.item.question_id);
+    }
+
+    /**
      * Renders search data item
      * @returns
      */
@@ -86,12 +97,13 @@ export class SearchDataItem extends React.Component<ISearchDataItem> {
                         onClick={this.handleClickOwner}
                     />
                 </TableCell>
-                <TableCell key={`${item.title}_title`} align='right'>
+                <TableCell key={`${item.title}_title`} align='right' onClick={this.handleClickContent}>
                     <Typography variant='body2'>{title}</Typography>
                 </TableCell>
                 <TableCell
                     key={`${item.answer_count}_answercount`}
                     align='right'
+                    onClick={this.handleClickContent}
                 >
                     {item.answer_count}
                 </TableCell>
@@ -116,3 +128,17 @@ export class SearchDataItem extends React.Component<ISearchDataItem> {
         );
     }
 }
+
+const mapDispatchToProps = (dispatch: any) => {
+    return bindActionCreators(
+        {
+            toDetails: ToDetails
+        },
+        dispatch
+    );
+};
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(SearchDataItem);

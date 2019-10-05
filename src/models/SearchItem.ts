@@ -8,4 +8,5 @@ export interface SearchItem {
     answer_count: number;
     owner: SearchOwner;
     tags: Array<string>;
+    question_id: number;
 }

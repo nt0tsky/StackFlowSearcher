@@ -10,7 +10,7 @@ import { SearchDataHeader } from './SearchDataHeader';
 import { HeaderItem } from '../../models/HeaderItem';
 import { SearchItem } from '../../models/SearchItem';
 import { SelectedItemDTO } from './models/SelectedItemDTO';
-import { SearchDataItem } from './SearchDataItem';
+import SearchDataItem from './SearchDataItem';
 import FaceIcon from '@material-ui/icons/Face';
 import './index.less';
 import { SelectedItemType } from './models/SelectedItemType';
@@ -70,10 +70,11 @@ export class SearchDataTable extends React.Component<
         });
     };
 
+    /**
+     * Components did update
+     */
     componentDidUpdate() {
-        debugger;
         if (this.state.selectedItem.selected) {
-            debugger;
             const item = this.props.searchItems[this.state.selectedItem.index];
             if (item !== this.state.selectedItem.item) {
                 this.setState({
