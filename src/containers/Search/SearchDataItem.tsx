@@ -3,7 +3,8 @@ import { SearchItem } from '../../models/SearchItem';
 import { TableRow, TableCell, Typography, Chip } from '@material-ui/core';
 import { SearchDataItemOwner } from './SearchDataItemOwner';
 import { SelectedItemDTO } from './models/SelectedItemDTO';
-import "./index.less";
+import './index.less';
+import { SelectedItemType } from './models/SelectedItemType';
 
 /**
  * Isearch data item
@@ -13,7 +14,7 @@ interface ISearchDataItem {
     index: number;
     selected: boolean;
     onSelectDataItem?: (item: SelectedItemDTO) => void;
-    onSelectTagItem?: (item: SearchItem, index: number, name: string) => void;
+    onSelectTagItem?: (item: SelectedItemDTO) => void;
 }
 
 /**
@@ -21,34 +22,42 @@ interface ISearchDataItem {
  */
 export class SearchDataItem extends React.Component<ISearchDataItem> {
     /**
-     * Handle title click of search data item
-     */
-    handleTitleClick = () => {
-        if (this.props.onSelectDataItem) {
-            this.props.onSelectDataItem({
-                index: this.props.index,
-                item: this.props.item,
-                selected: true
-            });
-        }
-    };
-
-    /**
      * Handle click owner of search data item
      */
     handleClickOwner = () => {
-        this.handleTitleClick();
+        if (this.props.onSelectDataItem) {
+            this.props.onSelectDataItem(
+                this.createSelectedItemType(SelectedItemType.AVATAR)
+            );
+        }
     };
 
-    
+    /**
+     * Create selected item type of search data item
+     */
+    createSelectedItemType = (
+        type: SelectedItemType,
+        value?: string
+    ): SelectedItemDTO => {
+        return {
+            index: this.props.index,
+            item: this.props.item,
+            type: type,
+            selected: true,
+            value: value
+        };
+    };
+
     /**
      * Handle click tag of search data item
      */
-    handleClickTag = (item: SearchItem, index: number, name: string) => {
+    handleClickTag = (name: string) => {
         if (this.props.onSelectTagItem) {
-            this.props.onSelectTagItem(item, index, name);
+            this.props.onSelectTagItem(
+                this.createSelectedItemType(SelectedItemType.TAG, name)
+            );
         }
-    }
+    };
 
     /**
      * Renders search data item
@@ -98,7 +107,7 @@ export class SearchDataItem extends React.Component<ISearchDataItem> {
                                     clickable
                                     component='a'
                                     label={val}
-                                    onClick={() => this.handleClickTag(this.props.item, this.props.index, val)}
+                                    onClick={() => this.handleClickTag(val)}
                                 />
                             );
                         })}

@@ -1,12 +1,19 @@
 import React from 'react';
-import { Table, TableBody, TablePagination, Chip, Typography } from '@material-ui/core';
+import {
+    Table,
+    TableBody,
+    TablePagination,
+    Chip,
+    Typography
+} from '@material-ui/core';
 import { SearchDataHeader } from './SearchDataHeader';
 import { HeaderItem } from '../../models/HeaderItem';
 import { SearchItem } from '../../models/SearchItem';
 import { SelectedItemDTO } from './models/SelectedItemDTO';
 import { SearchDataItem } from './SearchDataItem';
 import FaceIcon from '@material-ui/icons/Face';
-import "./index.less";
+import './index.less';
+import { SelectedItemType } from './models/SelectedItemType';
 
 /**
  * Isearch data table
@@ -19,6 +26,7 @@ interface ISearchDataTable {
     onRemoveFilter?: () => void;
     hideOnSelect: boolean;
     label?: string;
+    preventSelectItem?: (type: SelectedItemType) => boolean;
 }
 
 /**
@@ -62,26 +70,61 @@ export class SearchDataTable extends React.Component<
         });
     };
 
-    staySelectedItem = (item: SearchItem, idx: number) => {
+    componentDidUpdate() {
+        debugger;
+        if (this.state.selectedItem.selected) {
+            debugger;
+            const item = this.props.searchItems[this.state.selectedItem.index];
+            if (item !== this.state.selectedItem.item) {
+                this.setState({
+                    selectedItem: new SelectedItemDTO()
+                })
+            }
+        }
+    }
+
+    /**
+     * Stay selected item of search data table
+     */
+    staySelectedItem = (
+        item: SearchItem,
+        idx: number,
+        type: SelectedItemType
+    ) => {
         const selectedItem: SelectedItemDTO = {
             index: idx,
             item: item,
+            type: type,
             selected: true
         };
         if (this.props.hideOnSelect) {
-            this.setState({
-                selectedItem: selectedItem
-            });
+            let prevent: boolean =
+                (this.props.preventSelectItem &&
+                    this.props.preventSelectItem(type)) ||
+                false;
+            if (!prevent) {
+                this.setState({
+                    selectedItem: selectedItem
+                });
+            } else {
+                this.setState({
+                    selectedItem: new SelectedItemDTO()
+                })
+            }
         }
 
         return selectedItem;
-    }
+    };
 
     /**
      * Handle select data item of search data table
      */
     handleSelectDataItem = (item: SearchItem, idx: number) => {
-        const selectedItem = this.staySelectedItem(item, idx);
+        const selectedItem = this.staySelectedItem(
+            item,
+            idx,
+            SelectedItemType.AVATAR
+        );
         if (this.props.onSelectDataItem) {
             this.props.onSelectDataItem(selectedItem);
         }
@@ -90,12 +133,12 @@ export class SearchDataTable extends React.Component<
     /**
      * Handle select tag item of search data table
      */
-    handleSelectTagItem = (item: SearchItem, index: number, name: string) => {
-        this.staySelectedItem(item, index);
+    handleSelectTagItem = (item: SelectedItemDTO) => {
+        this.staySelectedItem(item.item, item.index, SelectedItemType.TAG);
         if (this.props.onSelectTagItem) {
-            this.props.onSelectTagItem(name);
+            this.props.onSelectTagItem(item.value ? item.value : '');
         }
-    }
+    };
 
     /**
      * Render items of search data
@@ -141,6 +184,8 @@ export class SearchDataTable extends React.Component<
         }
     };
 
+
+
     /**
      * Renders search data table
      * @returns
@@ -148,7 +193,11 @@ export class SearchDataTable extends React.Component<
     render() {
         return (
             <>
-                {this.props.label && <Typography className="datatable-label" variant="h6">{this.props.label}</Typography>}
+                {this.props.label && (
+                    <Typography className='datatable-label' variant='h6'>
+                        {this.props.label}
+                    </Typography>
+                )}
                 {this.props.hideOnSelect &&
                     this.state.selectedItem.selected && (
                         <Chip

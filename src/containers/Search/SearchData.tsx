@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-    Paper,
-    Grid,
-    LinearProgress
-} from '@material-ui/core';
+import { Paper, Grid, LinearProgress } from '@material-ui/core';
 import { HeaderItem } from '../../models/HeaderItem';
 import { SearchItem } from '../../models/SearchItem';
 import { SelectedItemDTO } from './models/SelectedItemDTO';
@@ -18,6 +14,7 @@ import {
 } from '../../store/search/actions';
 import { SearchService } from './services/SearchService';
 import { SearchDataTable } from './SearchDataTable';
+import { SelectedItemType } from './models/SelectedItemType';
 
 /**
  * Isearch data
@@ -72,7 +69,7 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
         if (this.props.tagSearch) {
             this.props.tagSearch(name);
         }
-    }
+    };
 
     /**
      * Handle remove filter of search data
@@ -87,7 +84,7 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
      */
     handleRemoveTagFilter = () => {
         this.props.tagFamousClear();
-    }
+    };
 
     /**
      * Components did update
@@ -108,18 +105,19 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
         const baseClasses = `search-data ${
             this.props.ownerQuestions.length ? 'secondary-paper' : ''
         }`;
+        const headerItems = SearchService.GetHeaderItems();
         return (
             <Grid container>
                 <Grid item xs={12}>
                     <Paper className={baseClasses}>
                         <SearchDataTable
-                            headerItems={SearchService.GetHeaderItems()}
+                            headerItems={headerItems}
                             searchItems={this.props.searchItems}
                             onSelectDataItem={this.handleSelectDataItem}
                             onSelectTagItem={this.handleSelectTagItem}
                             onRemoveFilter={this.handleRemoveFilter}
                             hideOnSelect={true}
-                            label={"Результаты поиска"}
+                            label={'Результаты поиска'}
                         />
                     </Paper>
                 </Grid>
@@ -129,13 +127,16 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
                     {this.props.ownerQuestions.length > 0 && (
                         <Paper className='search-data'>
                             <SearchDataTable
-                                headerItems={SearchService.GetHeaderItems()}
+                                headerItems={headerItems}
                                 searchItems={this.props.ownerQuestions}
                                 onSelectDataItem={this.handleSelectDataItem}
                                 onSelectTagItem={this.handleSelectTagItem}
                                 onRemoveFilter={this.handleRemoveFilter}
                                 hideOnSelect={true}
-                                label={"Наиболее популярные вопросы автора"}
+                                preventSelectItem={(type: SelectedItemType) =>
+                                    type === SelectedItemType.AVATAR
+                                }
+                                label={'Наиболее популярные вопросы автора'}
                             />
                         </Paper>
                     )}
@@ -145,13 +146,16 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
                     {this.props.tagItems.length > 0 && (
                         <Paper className='search-data'>
                             <SearchDataTable
-                                headerItems={SearchService.GetHeaderItems()}
+                                headerItems={headerItems}
                                 searchItems={this.props.tagItems}
                                 onSelectDataItem={this.handleSelectDataItem}
                                 onSelectTagItem={this.handleSelectTagItem}
                                 onRemoveFilter={this.handleRemoveTagFilter}
                                 hideOnSelect={true}
-                                label={"Поиск по тегам"}
+                                preventSelectItem={(type: SelectedItemType) =>
+                                    type === SelectedItemType.TAG
+                                }
+                                label={'Поиск по тегам'}
                             />
                         </Paper>
                     )}
