@@ -79,6 +79,17 @@ class SearchInput extends React.Component<ISearchInput, ISearchInputState> {
     };
 
     /**
+     * Handle key down of search input
+     */
+    handleKeyDown = (e: any) => {
+        if (e.keyCode === 13) {
+            if (this.props.onSearch) {
+                this.props.onSearch(this.state.value);
+            }
+        }
+    }
+
+    /**
      * Renders search
      * @returns
      */
@@ -94,6 +105,7 @@ class SearchInput extends React.Component<ISearchInput, ISearchInputState> {
                     fullWidth={true}
                     placeholder={this.props.placeholder}
                     onChange={this.handleChangeField}
+                    onKeyDown={this.handleKeyDown}
                 />
             </>
         );
