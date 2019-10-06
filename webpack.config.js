@@ -23,7 +23,11 @@ module.exports = {
         rules:[   //загрузчик для jsx
             {
                 test: /\.tsx?$/,
-                loader: "ts-loader"
+                loaders: ['babel-loader','ts-loader']
+            },
+            {
+                test: /\.(jsx?)$/,
+                loaders: ['babel-loader']
             },
             {
                 test: /\.less$/,
