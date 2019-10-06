@@ -60,7 +60,7 @@ class App extends React.Component<IApp> {
                             </Container>
                         </Grid>
                         <Grid item xs={12}>
-                            <Container>
+                            <Container className="route-container">
                                 <Routes />
                             </Container>
                         </Grid>

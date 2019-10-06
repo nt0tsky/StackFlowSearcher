@@ -8,11 +8,15 @@ const initialState: DetailsState = {
         answer_count: 0,
         owner: {
             display_name: "",
-            user_id: 0
+            user_id: 0,
+            link: "",
+            profile_image: "",
+            reputation: ""
         },
         question_id: 0,
         tags: [],
-        title: ""
+        title: "",
+        creation_date: 0
     },
     fetching: false
 };
