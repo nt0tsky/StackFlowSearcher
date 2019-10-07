@@ -119,9 +119,6 @@ class Details extends React.Component<IDetails, IDetailsState> {
                         <DetailsTags item={this.props.advancedItem} />
                     </CardActions>
                 </Card>
-                {/* <Paper>
-                    <div dangerouslySetInnerHTML={{ __html: this.props.advancedItem.body }}></div>;
-                </Paper> */}
             </ReactCSSTransitionGroup>
         );
     }

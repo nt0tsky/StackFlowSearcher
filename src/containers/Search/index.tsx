@@ -53,7 +53,7 @@ class Search extends React.Component<ISearch, ISearchState> {
      */
     componentDidMount() {
         if (this.props.match && this.props.match.params) {
-            this.props.searchAction(this.props.match.params.intitle);
+            this.props.searchAction(decodeURIComponent(this.props.match.params.intitle));
         }
     }
 

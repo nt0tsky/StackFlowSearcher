@@ -34,7 +34,7 @@ class SearchInput extends React.Component<ISearchInput, ISearchInputState> {
     /**
      * Timeout of search
      */
-    private timeout: number = 700;
+    private timeout: number = 1100;
 
     /**
      * Creates an instance of search.
