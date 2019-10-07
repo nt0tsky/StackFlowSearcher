@@ -6,13 +6,16 @@ import {
     OWNER_QUESTIONS_SEARCH,
     TAG_FAMOUS_SEARCH,
     TAG_FAMOUS_RECEIVED,
-    TAG_FAMOUS_CLEAR
+    TAG_FAMOUS_CLEAR,
+    SAVE_PAGING,
+    RESET_PAGING
 } from './types';
 
 const initialState: SearchState = {
     ownerItems: [],
     tagItems: [],
-    fetching: false
+    fetching: false,
+    page: 0
 };
 
 export function searchReducer(
@@ -52,6 +55,18 @@ export function searchReducer(
             return {
                 ...state,
                 tagItems: []
+            }
+        }
+        case SAVE_PAGING: {
+            return {
+                ...state,
+                page: action.payload
+            }
+        }
+        case RESET_PAGING: {
+            return {
+                ...state,
+                page: action.payload
             }
         }
         default: {

@@ -6,7 +6,7 @@ import {
     ResponseReceivedAction,
     SaveLatestSearchAction
 } from '../../store/searchinput/actions';
-import { TagFamousClear, OwnerQuestionsClear } from "../../store/search/actions";
+import { TagFamousClear, OwnerQuestionsClear, ResetPageAction } from "../../store/search/actions";
 import { ToResultsAction } from '../../store/navigation/actions';
 import { ReceivedOwnerQuestions, TagFamousReceived } from '../../store/search/actions';
 import { OWNER_QUESTIONS_SEARCH, TAG_FAMOUS_SEARCH } from '../../store/search/types';

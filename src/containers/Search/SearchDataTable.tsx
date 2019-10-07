@@ -14,6 +14,10 @@ import SearchDataItem from './SearchDataItem';
 import FaceIcon from '@material-ui/icons/Face';
 import './index.less';
 import { SelectedItemType } from './models/SelectedItemType';
+import { RootState } from '../../store';
+import { connect } from 'react-redux';
+import { SavePageAction } from '../../store/search/actions';
+import { bindActionCreators } from 'redux';
 
 /**
  * Isearch data table
@@ -26,7 +30,9 @@ interface ISearchDataTable {
     onRemoveFilter?: () => void;
     hideOnSelect: boolean;
     label?: string;
+    page: number;
     preventSelectItem?: (type: SelectedItemType) => boolean;
+    savePagingAction: (page: number) => void;
 }
 
 /**
@@ -34,14 +40,13 @@ interface ISearchDataTable {
  */
 interface ISearchDataTableState {
     rowsPerPage: number;
-    page: number;
     selectedItem: SelectedItemDTO;
 }
 
 /**
  * Search data table
  */
-export class SearchDataTable extends React.Component<
+class SearchDataTable extends React.Component<
     ISearchDataTable,
     ISearchDataTableState
 > {
@@ -51,7 +56,6 @@ export class SearchDataTable extends React.Component<
     constructor(props: ISearchDataTable) {
         super(props);
         this.state = {
-            page: 0,
             rowsPerPage: 5,
             selectedItem: new SelectedItemDTO()
         };
@@ -64,8 +68,8 @@ export class SearchDataTable extends React.Component<
         event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
         newPage: number
     ) => {
+        this.props.savePagingAction(newPage);
         this.setState({
-            page: newPage,
             selectedItem: new SelectedItemDTO()
         });
     };
@@ -146,7 +150,7 @@ export class SearchDataTable extends React.Component<
      */
     renderItems = () => {
         const startIdx: number =
-            this.state.page * this.state.rowsPerPage +
+            this.props.page * this.state.rowsPerPage +
             (this.state.selectedItem.index ? this.state.selectedItem.index : 0);
         const endIdx: number =
             startIdx +
@@ -219,10 +223,28 @@ export class SearchDataTable extends React.Component<
                     component='div'
                     count={this.props.searchItems.length}
                     rowsPerPage={this.state.rowsPerPage}
-                    page={this.state.page}
+                    page={this.props.page}
                     onChangePage={this.handleChangePage}
                 />
             </>
         );
     }
 }
+
+const mapStateToProps = (state: RootState) => ({
+    page: state.search.page
+});
+
+const mapDispatchToProps = (dispatch: any) => {
+    return bindActionCreators(
+        {
+            savePagingAction: SavePageAction
+        },
+        dispatch
+    );
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SearchDataTable);

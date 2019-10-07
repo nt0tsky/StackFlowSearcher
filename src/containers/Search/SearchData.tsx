@@ -10,10 +10,11 @@ import {
     OwnerQuestionsSearch,
     OwnerQuestionsClear,
     TagFamousSearch,
-    TagFamousClear
+    TagFamousClear,
+    ResetPageAction
 } from '../../store/search/actions';
 import { SearchService } from './services/SearchService';
-import { SearchDataTable } from './SearchDataTable';
+import SearchDataTable from './SearchDataTable';
 import { SelectedItemType } from './models/SelectedItemType';
 
 /**
@@ -30,6 +31,7 @@ interface ISearchData {
     ownerQuestionsClear: () => void;
     tagSearch: (name: string) => void;
     tagFamousClear: () => void;
+    resetPageAction: () => void;
 }
 
 /**
@@ -94,6 +96,7 @@ class SearchData extends React.Component<ISearchData, ISearchDataState> {
             this.setState({
                 searchText: this.props.searchText
             });
+            this.props.resetPageAction();
         }
     }
 
@@ -177,7 +180,8 @@ const mapDispatchToProps = (dispatch: any) => {
             ownerQuestionsSearch: OwnerQuestionsSearch,
             ownerQuestionsClear: OwnerQuestionsClear,
             tagSearch: TagFamousSearch,
-            tagFamousClear: TagFamousClear
+            tagFamousClear: TagFamousClear,
+            resetPageAction: ResetPageAction
         },
         dispatch
     );
