@@ -4,7 +4,7 @@ const Dotenv = require("dotenv-webpack");
 const templates = path.resolve(__dirname, "./src/templates");
 
 module.exports = {
-    entry: "./src/index.tsx",
+    entry: ["babel-polyfill", "./src/index.tsx"],
     mode: "development",
     devServer: {
         historyApiFallback: true
