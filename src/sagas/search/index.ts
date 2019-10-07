@@ -6,6 +6,7 @@ import {
     ResponseReceivedAction,
     SaveLatestSearchAction
 } from '../../store/searchinput/actions';
+import { TagFamousClear, OwnerQuestionsClear } from "../../store/search/actions";
 import { ToResultsAction } from '../../store/navigation/actions';
 import { ReceivedOwnerQuestions, TagFamousReceived } from '../../store/search/actions';
 import { OWNER_QUESTIONS_SEARCH, TAG_FAMOUS_SEARCH } from '../../store/search/types';
@@ -60,6 +61,8 @@ function* handleSearch(action: BaseAction) {
     if (data.data && data.data.items) {
         yield put(ResponseReceivedAction(data.data.items));
         yield put(SaveLatestSearchAction(action.payload));
+        yield put(OwnerQuestionsClear());
+        yield put(TagFamousClear());
         yield put(ToResultsAction(action.payload));
     }
 }
